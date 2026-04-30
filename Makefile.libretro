@@ -914,7 +914,7 @@ clean-objs:
 
 clean:
 	rm -f $(OBJECTS)
-	rm -f $(TARGET)
+	rm -f $(TARGET) $(SDL_FRONTEND_TARGET)
 
 .PHONY: clean clean-objs
 endif

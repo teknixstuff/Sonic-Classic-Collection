@@ -917,7 +917,7 @@ static void core_load_game(const char *filename) {
 
     // Now that we have the system info, set the window title.
     char window_title[255];
-    snprintf(window_title, sizeof(window_title), "sdlarch %s %s", system.library_name, system.library_version);
+    snprintf(window_title, sizeof(window_title), "%s %s", system.library_name, system.library_version);
     SDL_SetWindowTitle(g_win, window_title);
 }
 
