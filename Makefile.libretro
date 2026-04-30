@@ -10,6 +10,7 @@ LOW_MEMORY = 0
 MAX_ROM_SIZE = 10485760
 
 CORE_DIR := .
+ROMDIR = roms
 
 SPACE :=
 SPACE := $(SPACE) $(SPACE)
@@ -758,13 +759,14 @@ else
    PLATFORM_DEFINES := -DHAVE_ZLIB -DENABLE_SUB_68K_ADDRESS_ERROR_EXCEPTIONS
    HAVE_CDROM = 1
    MAX_ROM_SIZE = 33554432
+   ROM_BUILD = 1
    SDL_FRONTEND = 1
    SDL_FRONTEND_TARGET := $(TARGET_NAME)_sdl.exe
    SDL_FRONTEND_LDFLAGS := -static -static-libgcc -static-libstdc++ -Wl,--version-script=$(CORE_DIR)/libretro/link.T -Wl,--no-undefined
    SDL_FRONTEND_LIBS := -lmingw32 -lSDL2main -lSDL2 -static -lwinmm -lole32 -limm32 -loleaut32 -lversion -lsetupapi
    SDL_FRONTEND_LIBS += $(shell pkg-config --libs-only-l sdl2)
    SDL_FRONTEND_LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other sdl2)
-   SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o
+   SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o $(ROMDIR)/roms.o
    CFLAGS += $(shell pkg-config --cflags sdl2)
 endif
 
@@ -897,8 +899,7 @@ all: $(TARGET) $(SDL_FRONTEND_TARGET)
 %.o: %.c
 	$(CC) $(OBJOUT)$@ -c $< $(CFLAGS) $(LIBRETRO_CFLAGS)
 
-ROMDIR = roms
-
+ifeq ($(ROM_BUILD), 1)
 ROMS = $(ROMDIR)/sonic1.md \
        $(ROMDIR)/sonic2.md \
        $(ROMDIR)/sonic3.md
@@ -914,6 +915,13 @@ $(ROMDIR)/sonic2.md: .FORCE
 $(ROMDIR)/sonic3.md: .FORCE
 	cd roms/skdisasm; ./build.bat
 	@mv roms/skdisasm/sonic3k.bin '$@'
+
+$(ROMDIR)/roms.rc: roms/makeroms.sh
+	$(ROMDIR)/makeroms.sh $(ROMS) > '$@'
+
+$(ROMDIR)/roms.o: $(ROMDIR)/roms.rc $(ROMS)
+	windres $(ROMDIR)/roms.rc $@
+endif
 
 $(TARGET): $(OBJECTS)
 ifeq ($(STATIC_LINKING), 1)

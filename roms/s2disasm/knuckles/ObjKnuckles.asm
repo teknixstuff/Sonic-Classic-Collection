@@ -77,7 +77,7 @@ Obj_Knuckles_Control:					  ; ...
 	bne.s	+			; if yes, branch
 	move.w	(Ctrl_1).w,(Ctrl_1_Logical).w	; copy new held buttons, to enable joypad control
 	move.w	(Ctrl_6btn_1).w,(Ctrl_6btn_1_Logical).w
-	move.w	(Ctrl_Analog_1).w,(Ctrl_Analog_1_Logical).w	; copy new held buttons, to enable joypad control
+	;move.w	(Ctrl_Analog_1).w,(Ctrl_Analog_1_Logical).w	; copy new held buttons, to enable joypad control
 +
 	btst	#0,obj_control(a0)	; is Sonic interacting with another object that holds him in place or controls his movement somehow?
 	bne.s	+			; if yes, branch to skip Sonic's control
