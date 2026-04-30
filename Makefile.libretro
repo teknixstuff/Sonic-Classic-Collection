@@ -897,6 +897,24 @@ all: $(TARGET) $(SDL_FRONTEND_TARGET)
 %.o: %.c
 	$(CC) $(OBJOUT)$@ -c $< $(CFLAGS) $(LIBRETRO_CFLAGS)
 
+ROMDIR = roms
+
+ROMS = $(ROMDIR)/sonic1.md \
+       $(ROMDIR)/sonic2.md \
+       $(ROMDIR)/sonic3.md
+
+$(ROMDIR)/sonic1.md: .FORCE
+	cd roms/s1disasm; ./build.bat
+	@mv roms/s1disasm/s1.bin '$@'
+
+$(ROMDIR)/sonic2.md: .FORCE
+	cd roms/s2disasm; ./build.bat
+	@mv roms/s2disasm/s2built.md '$@'
+
+$(ROMDIR)/sonic3.md: .FORCE
+	cd roms/skdisasm; ./build.bat
+	@mv roms/skdisasm/sonic3k.bin '$@'
+
 $(TARGET): $(OBJECTS)
 ifeq ($(STATIC_LINKING), 1)
 	$(AR) rcs $@ $(OBJECTS)
@@ -917,6 +935,7 @@ clean:
 	rm -f $(TARGET) $(SDL_FRONTEND_TARGET)
 
 .PHONY: clean clean-objs
+.FORCE: 
 endif
 
 print-%:

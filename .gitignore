@@ -17,6 +17,7 @@ genesis_plus_gx_libretro.*
 genesis_plus_gx_wide_libretro.*
 genesis_plus_gx_sdl.*
 genesis_plus_gx_wide_sdl.*
+/roms/*.md
 
 *.o
 *.a
