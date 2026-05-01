@@ -920,7 +920,7 @@ $(ROMDIR)/roms.rc: roms/makeroms.sh
 	$(ROMDIR)/makeroms.sh $(ROMS) > '$@'
 
 $(ROMDIR)/roms.o: $(ROMDIR)/roms.rc $(ROMS)
-	windres $(ROMDIR)/roms.rc $@
+	windres $(ROMDIR)/roms.rc -O coff $@
 endif
 
 $(TARGET): $(OBJECTS)
