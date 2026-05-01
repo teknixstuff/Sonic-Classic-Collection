@@ -952,10 +952,7 @@ static void core_load_game(const char *filename) {
     if (info.data)
         SDL_free((void*)info.data);
 
-    // Now that we have the system info, set the window title.
-    char window_title[255];
-    snprintf(window_title, sizeof(window_title), "%s %s", system.library_name, system.library_version);
-    SDL_SetWindowTitle(g_win, window_title);
+    SDL_SetWindowTitle(g_win, "Sonic Classic Collection");
 }
 
 static void core_unload() {
@@ -963,10 +960,39 @@ static void core_unload() {
         retro_deinit();
 }
 
+static bool game_select() {
+    struct retro_game_geometry geometry = {1194, 672, 1194, 672, 0};
+    float old_scale = g_scale;
+    g_scale = 1;
+    video_configure(&geometry);
+    SDL_SetWindowTitle(g_win, "Sonic Classic Collection");
+
+    SDL_Event ev;
+
+    while (running) {
+        while (SDL_PollEvent(&ev)) {
+            switch (ev.type) {
+            case SDL_QUIT: running = false; break;
+            case SDL_WINDOWEVENT:
+                switch (ev.window.event) {
+                case SDL_WINDOWEVENT_CLOSE: running = false; break;
+                case SDL_WINDOWEVENT_RESIZED:
+                    resize_cb(ev.window.data1, ev.window.data2);
+                    break;
+                }
+            }
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    g_scale = old_scale;
+    return false;
+}
+
 static void noop() {}
 
 int main(int argc, char *argv[]) {
-    if (argc != 2)
+    if (argc > 2)
         die("usage: %s <game>", argv[0]);
 
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_EVENTS) < 0)
@@ -982,7 +1008,10 @@ int main(int argc, char *argv[]) {
     core_load();
 
     // Load the game.
-    core_load_game(argv[1]);
+    if (argc == 2)
+        core_load_game(argv[1]);
+    else if (!game_select())
+        return 0;
 
     // Configure the player input devices.
     retro_set_controller_port_device(0, RETRO_DEVICE_JOYPAD);
