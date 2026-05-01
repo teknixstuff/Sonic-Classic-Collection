@@ -5284,5 +5284,4 @@ SoundDriver:	include "s1.sounddriver.asm"
 
 ; end of 'ROM'
 EndOfRom:
-
 		END

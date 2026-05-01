@@ -920,7 +920,7 @@ $(ROMDIR)/roms.rc: roms/makeroms.sh
 	$(ROMDIR)/makeroms.sh $(ROMS) > '$@'
 
 $(ROMDIR)/roms.o: $(ROMDIR)/roms.rc $(ROMS)
-	windres $(ROMDIR)/roms.rc -O coff $@
+	windres $(ROMDIR)/roms.rc $@
 endif
 
 $(TARGET): $(OBJECTS)
@@ -936,10 +936,10 @@ $(SDL_FRONTEND_TARGET): $(OBJECTS) $(SDL_FRONTEND_OBJECTS)
 endif
   
 clean-objs:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) $(SDL_FRONTEND_OBJECTS) $(ROMS) roms/roms.rc
 
 clean:
-	rm -f $(OBJECTS)
+	rm -f $(OBJECTS) $(SDL_FRONTEND_OBJECTS) $(ROMS) roms/roms.rc
 	rm -f $(TARGET) $(SDL_FRONTEND_TARGET)
 
 .PHONY: clean clean-objs
