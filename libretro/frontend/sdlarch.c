@@ -9,6 +9,8 @@ static struct retro_frame_time_callback runloop_frame_time;
 static retro_usec_t runloop_frame_time_last = 0;
 static const uint8_t *g_kbd = NULL;
 static struct retro_audio_callback audio_callback;
+static bool g_gameInfoExtValid = false;
+static struct retro_game_info_ext g_gameInfoExt = { 0 };
 
 static float g_scale = 3;
 bool running = true;
@@ -804,6 +806,13 @@ static bool core_environment(unsigned cmd, void *data) {
         *value = 1 << 0 | 1 << 1;
         return true;
     }
+    case RETRO_ENVIRONMENT_GET_GAME_INFO_EXT: {
+        if (!g_gameInfoExtValid) {
+            return false;
+        }
+        *(struct retro_game_info_ext**)data = &g_gameInfoExt;
+        return true;
+    }
     default:
         core_log(RETRO_LOG_DEBUG, "Unhandled env #%u", cmd);
         return false;
@@ -871,10 +880,38 @@ static void core_load_game(const char *filename) {
     struct retro_system_info system = {0};
     struct retro_game_info info = { filename, 0 };
 
+    g_gameInfoExtValid = false;
     info.path = filename;
     info.meta = "";
     info.data = NULL;
     info.size = 0;
+
+    #if defined(_WIN32)
+    char szArcPath[MAX_PATH];
+    char szArcDir[MAX_PATH];
+    char szGameName[MAX_PATH];
+    char szGameExt[MAX_PATH];
+    if (HRSRC hRes = FindResource(NULL, filename, "ROM")) {
+      info.size = SizeofResource(NULL, hRes);
+      HGLOBAL hResGlob = LoadResource(NULL, hRes);
+      info.data = (unsigned char*)LockResource(hResGlob);
+      g_gameInfoExtValid = true;
+      g_gameInfoExt.full_path = NULL;
+      GetModuleFileNameA(NULL, szArcPath, MAX_PATH);
+      _splitpath(szArcPath, NULL, szArcDir, NULL, NULL);
+      g_gameInfoExt.archive_path = szArcPath;
+      g_gameInfoExt.archive_file = filename;
+      g_gameInfoExt.dir = szArcDir;
+      _splitpath(filename, NULL, NULL, szGameName, szGameExt);
+      g_gameInfoExt.name = szGameName;
+      g_gameInfoExt.ext = szGameExt;
+      g_gameInfoExt.meta = "";
+      g_gameInfoExt.data = info.data;
+      g_gameInfoExt.size = info.size;
+      g_gameInfoExt.file_in_archive = true;
+      g_gameInfoExt.persistent_data = true;
+    } else
+    #endif
 
     if (filename) {
         retro_get_system_info(&system);
