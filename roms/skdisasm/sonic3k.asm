@@ -6286,10 +6286,7 @@ loc_4C28:
 		lea	(Ani_TitleTailsPlane).l,a1
 		jsr	(Animate_Sprite).l
 		tst.b	render_flags(a0)
-		bpl.s	loc_4C3E
 		bsr.w	S3_Level_Select_Code
-
-loc_4C3E:
 		jmp	(Draw_Sprite).l
 ; ---------------------------------------------------------------------------
 Ani_TitleTailsPlane:
@@ -6299,7 +6296,7 @@ Ani_TitleTailsPlane:
 
 
 S3_Level_Select_Code:
-		rts
+		;rts
 ; ---------------------------------------------------------------------------
 		; unused
 		lea	(LSelect3CodeDat).l,a1
@@ -6328,14 +6325,14 @@ locret_4C90:
 
 ; ---------------------------------------------------------------------------
 LSelect3CodeDat:
-		dc.b button_up_mask
-		dc.b button_up_mask
-		dc.b button_down_mask
-		dc.b button_down_mask
-		dc.b button_up_mask
-		dc.b button_up_mask
-		dc.b button_up_mask
-		dc.b button_up_mask
+		dc.b button_left_mask
+		dc.b button_left_mask
+		dc.b button_right_mask
+		dc.b button_right_mask
+		dc.b button_left_mask
+		dc.b button_left_mask
+		dc.b button_left_mask
+		dc.b button_left_mask
 		dc.b 0
 		even
 Map_TitleScreenText:
