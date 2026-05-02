@@ -10,6 +10,7 @@
 ; Base Address:	0000h Range: 0000h - 200000h Loaded length: 200000h
 ;
 ; 2006-12-31 - Original buildable disassembly, labeling, and formatting by Stealth
+; 2026-05-02 - Sonic 3 Complete features ported by Tech Stuff
 ; Please list any revisions
 
 ; Processor:        68000
@@ -5432,7 +5433,7 @@ Title_Screen:
 		move.w	#(6*60)-1,(Demo_timer).w		; Wait on title screen for six seconds
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w	; Clear DMA queue
-	if 0
+	if 1
 		; Sonic 2 Beta 4 reveals that these were the original instructions.
 		; The original source code may have been able to produce debug builds with this enabled.
 		move.w	#$101,(Level_select_flag).w
@@ -9961,6 +9962,10 @@ LevelSelect_S2Options:
 	.writezone:
 		move.w	(a5)+,d3	; Get relative address in plane map to write to
 		lea	(a3,d3.w),a2	; Get absolute address
+		cmpi.w  #6,d1
+		bne.s   .not_hidden_palace
+		lea	$28*2(a2),a2	; Next line
+	.not_hidden_palace:
 		moveq	#0,d2
 		move.b	(a1)+,d2	; Get length of string
 		move.w	d2,d3		; Store it
@@ -9991,8 +9996,14 @@ LevelSelect_S2Options:
 		move.w	#make_art_tile('*',0,0),(a2)	; Replace that with '*'
 
 		; Overwrite duplicate LAVA REEF 1/2 with 3/4 (obviously, S3 didn't do this)
-		move.w	#make_art_tile('3',0,0),(RAM_start+planeLocH28($25,4)).l
-		move.w	#make_art_tile('4',0,0),(RAM_start+planeLocH28($25,5)).l
+		; or not. Let's match S3C. Except that "X" doesn't make much sense, so we'll put BOSS instead.
+		move.w	#make_art_tile('B',0,0),(RAM_start+planeLocH28($22,3)).l
+		move.w	#make_art_tile('O',0,0),(RAM_start+planeLocH28($23,3)).l
+		move.w	#make_art_tile('S',0,0),(RAM_start+planeLocH28($24,3)).l
+		move.w	#make_art_tile('S',0,0),(RAM_start+planeLocH28($25,3)).l
+		move.w	#make_art_tile(' ',0,0),(RAM_start+planeLocH28($25,4)).l
+		move.w	#make_art_tile(' ',0,0),(RAM_start+planeLocH28($25,5)).l
+		move.w	#make_art_tile(' ',0,0),(RAM_start+planeLocH28($25,6)).l
 
 		restore
 
@@ -10520,8 +10531,8 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 ; --- second column ---
 		dc.b    1, $2C,   1, $4A
 		dc.b    1, $2C,   2, $4A
-		dc.b    4, $2C,   4, $4A
-		dc.b    4, $2C,   5, $4A
+		dc.b    1, $2C,   3, $4A
+		dc.b    5, $2C,   5, $42
 		dc.b    7, $2C,   7, $4A
 		dc.b    7, $2C,   8, $4A
 		dc.b   $A, $2C,  $A, $4A
@@ -10562,10 +10573,10 @@ LevelSelectText:
 		levselstr "FLYING BATTERY"
 		levselstr "SANDOPOLIS"
 		levselstr "LAVA REEF"
-		levselstr "LAVA REEF"
+		levselstr "HIDDEN PALACE"
 		levselstr "SKY SANCTUARY"
 		levselstr "DEATHEGG"
-		levselstr "THE DOOMSDAY"
+		levselstr "DOOMSDAY"
 		levselstr "BONUS"
 		levselstr "SPECIAL STAGE"
 		levselstr "SOUND TEST  *"
