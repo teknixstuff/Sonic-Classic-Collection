@@ -5433,7 +5433,7 @@ Title_Screen:
 		move.w	#(6*60)-1,(Demo_timer).w		; Wait on title screen for six seconds
 		clr.w	(DMA_queue).w
 		move.l	#DMA_queue,(DMA_queue_slot).w	; Clear DMA queue
-	if 1
+	if 0
 		; Sonic 2 Beta 4 reveals that these were the original instructions.
 		; The original source code may have been able to produce debug builds with this enabled.
 		move.w	#$101,(Level_select_flag).w
