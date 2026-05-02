@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Install SDL2_Image
-      run: curl -L https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.12/SDL2_image-devel-2.8.12-mingw.tar.gz | tar -C /mingw32 --strip-components=2 -zxvf - SDL2_image-2.8.12/x86_64-w64-mingw32
+      run: curl -L https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.12/SDL2_image-devel-2.8.12-mingw.tar.gz | tar -C /mingw32 --strip-components=2 -zxvf - SDL2_image-2.8.12/i686-w64-mingw32
     
     - name: Build
       run: make
