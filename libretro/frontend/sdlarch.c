@@ -974,6 +974,19 @@ static SDL_Texture* load_image_resource(SDL_Renderer* renderer, char* name) {
     return IMG_LoadTexture_RW(renderer, buf, 1);
 }
 
+static int easedInterpolate(int a, int b, float t) {
+  return a + (t < 0.5 ? 4 * t * t * t : 1 - pow(-2 * t + 2, 3) / 2) * (b - a);
+}
+
+static SDL_Rect easedInterpolateRect(SDL_Rect a, SDL_Rect b, float t) {
+  SDL_Rect out;
+  out.x = easedInterpolate(a.x, b.x, t);
+  out.y = easedInterpolate(a.y, b.y, t);
+  out.w = easedInterpolate(a.w, b.w, t);
+  out.h = easedInterpolate(a.h, b.h, t);
+  return out;
+}
+
 static bool game_select() {
     struct retro_game_geometry geometry = {1194, 672, 1194, 672, 0};
     float old_scale = g_scale;
@@ -990,6 +1003,7 @@ static bool game_select() {
     char* gameROMs[] = {"sonic1", "sonic2", "sonic3"};
 
     int selectedGame = 0;
+    float transitionTime = 0;
 
     SDL_Event ev;
 
@@ -1008,11 +1022,13 @@ static bool game_select() {
                     }
                 }
                 case SDL_KEYDOWN: {
-                    if (ev.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_LEFT && !transitionTime) {
                         selectedGame = (selectedGame + 2) % 3;
+                        transitionTime = -1.0;
                     }
-                    if (ev.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_RIGHT && !transitionTime) {
                         selectedGame = (selectedGame + 1) % 3;
+                        transitionTime = 1.0;
                     }
                     if (ev.key.keysym.scancode == SDL_SCANCODE_RETURN) {
                         core_load_game(gameROMs[selectedGame]);
@@ -1023,14 +1039,36 @@ static bool game_select() {
             }
         }
 
+        retro_time_t current = cpu_features_get_time_usec();
+        retro_time_t delta = current - runloop_frame_time_last;
+        if (!runloop_frame_time_last) delta = 0;
+        runloop_frame_time_last = current;
+
+        printf("%f %f\n", transitionTime, (delta/1000)/1000.0);
+        fflush(stdout);
+        if (transitionTime > 0) transitionTime = fmax(0, transitionTime - ((delta/1000)/1000.0));
+        if (transitionTime < 0) transitionTime = fmin(0, transitionTime + ((delta/1000)/1000.0));
+
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, NULL, NULL);
         SDL_Rect glrect = {16, 262, 264, 148};
-        SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &glrect);
         SDL_Rect gmrect = {299, 168, 596, 336};
-        SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &gmrect);
         SDL_Rect grrect = {912, 262, 264, 148};
-        SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &grrect);
+        if (transitionTime < 0) {
+            SDL_Rect g1rect = easedInterpolateRect(grrect, gmrect, transitionTime*-1);
+            SDL_Rect g2rect = easedInterpolateRect(glrect, grrect, transitionTime*-1);
+            SDL_Rect g3rect = easedInterpolateRect(gmrect, glrect, transitionTime*-1);
+            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g2rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g1rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g3rect);
+        } else {
+            SDL_Rect g1rect = easedInterpolateRect(grrect, glrect, transitionTime);
+            SDL_Rect g2rect = easedInterpolateRect(glrect, gmrect, transitionTime);
+            SDL_Rect g3rect = easedInterpolateRect(gmrect, grrect, transitionTime);
+            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g1rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g3rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g2rect);
+        }
         SDL_RenderPresent(renderer);
     }
 
