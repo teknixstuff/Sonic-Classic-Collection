@@ -1058,16 +1058,16 @@ static bool game_select() {
             SDL_Rect g1rect = easedInterpolateRect(grrect, gmrect, transitionTime*-1);
             SDL_Rect g2rect = easedInterpolateRect(glrect, grrect, transitionTime*-1);
             SDL_Rect g3rect = easedInterpolateRect(gmrect, glrect, transitionTime*-1);
-            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g2rect);
-            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g1rect);
-            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g3rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g2rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g1rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g3rect);
         } else {
             SDL_Rect g1rect = easedInterpolateRect(grrect, glrect, transitionTime);
             SDL_Rect g2rect = easedInterpolateRect(glrect, gmrect, transitionTime);
             SDL_Rect g3rect = easedInterpolateRect(gmrect, grrect, transitionTime);
-            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g1rect);
-            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g3rect);
-            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g2rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &g1rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &g3rect);
+            SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &g2rect);
         }
         SDL_RenderPresent(renderer);
     }
