@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_image.h>
 #include "libretro.h"
 #include "glad.h"
 
@@ -960,6 +961,19 @@ static void core_unload() {
         retro_deinit();
 }
 
+static SDL_Texture* load_image_resource(SDL_Renderer* renderer, char* name) {
+    HRSRC hRes = FindResource(NULL, name, "PNG");
+    if (!hRes) return NULL;
+    int size = SizeofResource(NULL, hRes);
+    HGLOBAL hResGlob = LoadResource(NULL, hRes);
+    if (!hResGlob) return NULL;
+    unsigned char* data = (unsigned char*)LockResource(hResGlob);
+    if (!data) return NULL;
+    SDL_RWops* buf = SDL_RWFromConstMem(data, size);
+    if (!buf) return NULL;
+    return IMG_LoadTexture_RW(renderer, buf, 1);
+}
+
 static bool game_select() {
     struct retro_game_geometry geometry = {1194, 672, 1194, 672, 0};
     float old_scale = g_scale;
@@ -967,25 +981,64 @@ static bool game_select() {
     video_configure(&geometry);
     SDL_SetWindowTitle(g_win, "Sonic Classic Collection");
 
+    SDL_Renderer* renderer = SDL_CreateRenderer(g_win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    SDL_Texture* background = load_image_resource(renderer, "background");
+    SDL_Texture* sonic1 = load_image_resource(renderer, "sonic1");
+    SDL_Texture* sonic2 = load_image_resource(renderer, "sonic2");
+    SDL_Texture* sonic3 = load_image_resource(renderer, "sonic3");
+    SDL_Texture* games[] = {sonic1, sonic2, sonic3};
+    char* gameROMs[] = {"sonic1", "sonic2", "sonic3"};
+
+    int selectedGame = 0;
+
     SDL_Event ev;
 
-    while (running) {
+    int runState = 0;
+    while (runState == 0) {
         while (SDL_PollEvent(&ev)) {
             switch (ev.type) {
-            case SDL_QUIT: running = false; break;
-            case SDL_WINDOWEVENT:
-                switch (ev.window.event) {
-                case SDL_WINDOWEVENT_CLOSE: running = false; break;
-                case SDL_WINDOWEVENT_RESIZED:
-                    resize_cb(ev.window.data1, ev.window.data2);
-                    break;
+                case SDL_QUIT: runState = 1; break;
+                case SDL_WINDOWEVENT: {
+                    switch (ev.window.event) {
+                        case SDL_WINDOWEVENT_CLOSE: running = false; break;
+                        case SDL_WINDOWEVENT_RESIZED: {
+                            resize_cb(ev.window.data1, ev.window.data2);
+                            break;
+                        }
+                    }
+                }
+                case SDL_KEYDOWN: {
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_LEFT) {
+                        selectedGame = (selectedGame + 2) % 3;
+                    }
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_RIGHT) {
+                        selectedGame = (selectedGame + 1) % 3;
+                    }
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_RETURN) {
+                        core_load_game(gameROMs[selectedGame]);
+                        runState = 2;
+                        break;
+                    }
                 }
             }
         }
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, background, NULL, NULL);
+        SDL_Rect glrect = {16, 262, 264, 148};
+        SDL_RenderCopy(renderer, games[(selectedGame + 2) % 3], NULL, &glrect);
+        SDL_Rect gmrect = {299, 168, 596, 336};
+        SDL_RenderCopy(renderer, games[(selectedGame + 0) % 3], NULL, &gmrect);
+        SDL_Rect grrect = {912, 262, 264, 148};
+        SDL_RenderCopy(renderer, games[(selectedGame + 1) % 3], NULL, &grrect);
+        SDL_RenderPresent(renderer);
     }
+
+    SDL_DestroyRenderer(renderer);
     g_scale = old_scale;
+    if (runState == 2) {
+        return true;
+    }
     return false;
 }
 

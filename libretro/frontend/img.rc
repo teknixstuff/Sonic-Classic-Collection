@@ -1,0 +1,5 @@
+MAINICON ICON "img/icon.ico"
+BACKGROUND PNG "img/bg.png"
+SONIC1 PNG "img/s1asm.png"
+SONIC2 PNG "img/s2asm.png"
+SONIC3 PNG "img/s3asm.png"

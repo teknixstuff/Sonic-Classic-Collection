@@ -763,10 +763,10 @@ else
    SDL_FRONTEND = 1
    SDL_FRONTEND_TARGET := $(TARGET_NAME)_sdl.exe
    SDL_FRONTEND_LDFLAGS := -static -static-libgcc -static-libstdc++ -Wl,--version-script=$(CORE_DIR)/libretro/link.T -Wl,--no-undefined
-   SDL_FRONTEND_LIBS := -lmingw32 -lSDL2main -lSDL2 -static -lwinmm -lole32 -limm32 -loleaut32 -lversion -lsetupapi
-   SDL_FRONTEND_LIBS += $(shell pkg-config --libs-only-l sdl2)
-   SDL_FRONTEND_LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other sdl2)
-   SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o $(ROMDIR)/roms.o
+   SDL_FRONTEND_LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -static -lwinmm -lole32 -limm32 -loleaut32 -lversion -lsetupapi
+   SDL_FRONTEND_LIBS += $(shell pkg-config --libs-only-l sdl2 SDL2_image)
+   SDL_FRONTEND_LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other sdl2 SDL2_image)
+   SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o libretro/frontend/img.o $(ROMDIR)/roms.o
    CFLAGS += $(shell pkg-config --cflags sdl2)
 endif
 
@@ -898,6 +898,9 @@ all: $(TARGET) $(SDL_FRONTEND_TARGET)
 
 %.o: %.c
 	$(CC) $(OBJOUT)$@ -c $< $(CFLAGS) $(LIBRETRO_CFLAGS)
+
+%.o: %.rc
+	windres $< $@
 
 ifeq ($(ROM_BUILD), 1)
 ROMS = $(ROMDIR)/sonic1.md \
