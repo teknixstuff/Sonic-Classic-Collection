@@ -20,7 +20,7 @@ jobs:
         msystem: mingw32
         install: base-devel upx mingw-w64-i686-gcc mingw-w64-i686-SDL2 mingw-w64-i686-pkg-config
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Install SDL2_Image
       run: curl -L https://github.com/libsdl-org/SDL_image/releases/download/release-2.8.12/SDL2_image-devel-2.8.12-mingw.tar.gz | tar -C /mingw32 --strip-components=2 -zxvf - SDL2_image-2.8.12/i686-w64-mingw32
