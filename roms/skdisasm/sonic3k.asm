@@ -17622,7 +17622,7 @@ loc_DB84:
 		move.b	d0,(Level_started_flag).w
 
 loc_DB92:
-		addi.w	#$8F,d0
+		addi.w	#$67,d0
 		move.w	#$108,d1
 		move.w	#make_art_tile(ArtTile_Ring+$E,0,1),d5
 		lea	Map_HUD(pc),a1
