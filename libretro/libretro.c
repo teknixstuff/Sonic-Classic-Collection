@@ -1019,7 +1019,7 @@ static void config_default(void)
 #ifdef HAVE_OVERCLOCK
    config.overclock      = 100;
 #endif
-   config.no_sprite_limit = 0;
+   config.no_sprite_limit = 1;
    config.enhanced_vscroll = 0;
    config.enhanced_vscroll_limit = 8;
 
