@@ -131,10 +131,10 @@ locj_6D56:
 		beq.s	locj_6D70
 		; Draw new tiles on the right
 		moveq	#-16,d4
-		move.w	#320,d5
+		move.w	#368,d5
 		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
-		move.w	#320,d5
+		move.w	#368,d5
 		bsr.w	DrawBlocks_TB
 
 locj_6D70:
@@ -254,7 +254,7 @@ locj_6E78:
 		beq.s	locj_6E8C
 		lsr.b	#1,d0
 		move.b	d0,(a2)
-		move.w	#320,d5
+		move.w	#368,d5
 
 locj_6E8C:
 		lea	(locj_6DF4).l,a0
@@ -357,7 +357,7 @@ locj_6FB4:
 		beq.s	locj_6FC8
 		lsr.b	#1,d0
 		move.b	d0,(a2)
-		move.w	#320,d5
+		move.w	#368,d5
 
 locj_6FC8:
 		lea	(locj_6EF2).l,a0
@@ -755,7 +755,7 @@ locj_72Ba:
 		move.b	(a0,d0.w),d0
 		movea.w	locj_72B2(pc,d0.w),a3
 		beq.s	locj_72da
-		moveq	#-16,d5
+		moveq	#-64,d5
 		movem.l	d4/d5,-(sp)
 		bsr.w	Calc_VRAM_Pos
 		movem.l	(sp)+,d4/d5
