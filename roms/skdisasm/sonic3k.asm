@@ -10528,7 +10528,6 @@ LevSel_MarkTable:	; 4 bytes per level select entry
 ; --- second column ---
 		dc.b    1, $2C,   1, $4A
 		dc.b    1, $2C,   2, $4A
-		dc.b    1, $2C,   3, $4A
 		dc.b    3, $2C,   3, $4A
 		dc.b    5, $2C,   5, $4A
 		dc.b    7, $2C,   7, $4A
