@@ -102621,7 +102621,7 @@ Draw_TileColumn:
 		bpl.s	loc_4E948
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#$150,d0
+		addi.w	#$1BA,d0
 
 loc_4E948:
 		andi.w	#$30,d2
@@ -102652,7 +102652,7 @@ Draw_TileColumn2:
 		bpl.s	loc_4E98C
 		neg.w	d2
 		move.w	d3,d0
-		addi.w	#$150,d0
+		addi.w	#$1BA,d0
 		swap	d1
 
 loc_4E98C:
@@ -103181,7 +103181,7 @@ DrawTilesAsYouMove:
 		lea	(Camera_Y_pos_copy).w,a6
 		lea	(Camera_Y_pos_rounded).w,a5
 		move.w	(Camera_X_pos_copy).w,d1
-		moveq	#$20,d6
+		moveq	#$15,d6
 		jmp	Draw_TileRow(pc)
 ; End of function DrawTilesAsYouMove
 
@@ -103198,7 +103198,7 @@ DrawBGAsYouMove:
 		lea	(Camera_Y_pos_BG_copy).w,a6
 		lea	(Camera_Y_pos_BG_rounded).w,a5
 		move.w	(Camera_X_pos_BG_copy).w,d1
-		moveq	#$20,d6
+		moveq	#$15,d6
 		jmp	Draw_TileRow(pc)
 ; End of function DrawBGAsYouMove
 
