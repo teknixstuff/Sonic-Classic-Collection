@@ -5581,6 +5581,7 @@ loc_409C:
 		move.l	#vdpComm(VRAM_Plane_B_Name_Table,VRAM,WRITE),d0
 		moveq	#40-1,d1
 		moveq	#28-1,d2
+		move.w	#$872A,(VDP_control_port).l	; Change BG color to Pal 2 Color 10
 		jsr	(Plane_Map_To_VRAM).l		; Load S3K Title BG to $E000 VRAM
 		move.b	#4,(V_int_routine).w
 		bsr.w	Wait_VSync
