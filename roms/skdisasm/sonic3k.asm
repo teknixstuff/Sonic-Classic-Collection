@@ -103181,7 +103181,7 @@ DrawTilesAsYouMove:
 		lea	(Camera_Y_pos_copy).w,a6
 		lea	(Camera_Y_pos_rounded).w,a5
 		move.w	(Camera_X_pos_copy).w,d1
-		moveq	#$15,d6
+		moveq	#$1B,d6
 		jmp	Draw_TileRow(pc)
 ; End of function DrawTilesAsYouMove
 
