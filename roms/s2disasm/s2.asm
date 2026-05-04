@@ -11697,7 +11697,7 @@ MenuScreen_LevelSelect:
 	jsrto	(Dynamic_Normal).l, JmpTo2_Dynamic_Normal	; background
 
 	moveq	#PalID_Menu,d0
-	bsr.w	PalLoad_ForFade
+	jsr	PalLoad_ForFade
 
 	lea	(Normal_palette_line3).w,a1
 	lea	(Target_palette_line3).w,a2

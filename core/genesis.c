@@ -47,7 +47,7 @@ external_t *ext;
 external_t ext;
 #endif
 uint8 boot_rom[0x800];    /* Genesis BOOT ROM   */
-uint8 work_ram[0x10000];  /* 68K RAM  */
+uint8 work_ram[0x20000];  /* 68K RAM  */
 uint8 zram[0x2000];       /* Z80 RAM  */
 uint32 zbank;             /* Z80 bank window address */
 uint8 zstate;             /* Z80 bus state (d0 = /RESET, d1 = BUSREQ, d2 = WAIT) */
@@ -113,6 +113,9 @@ void gen_init(void)
       zbank_memory_map[i].read    = zbank_unused_r; 
       zbank_memory_map[i].write   = NULL;
     }
+
+    /* $FE0000-$FEFFFF : Extended RAM (64k) */
+    m68k.memory_map[0xFE].base     = work_ram + 0x10000;
 
     if (system_hw == SYSTEM_PICO)
     {

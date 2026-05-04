@@ -111,6 +111,36 @@ Txt_Music:				menutxt "MUSIC              "
 Txt_SFX:				menutxt "SOUND EFFECTS      "
 Txt_SoundOptions:		menutxt "SOUND OPTIONS      "
 
+Txt_EHZ1:			menutxt "EMERALD HILL      1"
+Txt_EHZ2:			menutxt "EMERALD HILL      2"
+Txt_CPZ1:			menutxt "CHEMICAL PLANT    1"
+Txt_CPZ2:			menutxt "CHEMICAL PLANT    2"
+Txt_ARZ1:			menutxt "AQUATIC RUIN      1"
+Txt_ARZ2:			menutxt "AQUATIC RUIN      2"
+Txt_CNZ1:			menutxt "CASINO NIGHT      1"
+Txt_CNZ2:			menutxt "CASINO NIGHT      2"
+Txt_HTZ1:			menutxt "HILL TOP          1"
+Txt_HTZ2:			menutxt "HILL TOP          2"
+Txt_MCZ1:			menutxt "MYSTIC CAVE       1"
+Txt_MCZ2:			menutxt "MYSTIC CAVE       2"
+Txt_OOZ1:			menutxt "OIL OCEAN         1"
+Txt_OOZ2:			menutxt "OIL OCEAN         2"
+Txt_MPZ1:			menutxt "METROPOLIS        1"
+Txt_MPZ2:			menutxt "METROPOLIS        2"
+Txt_MPZ3:			menutxt "METROPOLIS        3"
+Txt_SCZ:			menutxt "SKY CHASE          "
+Txt_WFZ:			menutxt "WING FORTRESS      "
+Txt_DEZ:			menutxt "DEATH EGG          "
+Txt_Clear:			menutxt "CLEARED            "
+Txt_NewFile:			menutxt "NEW                "
+Txt_NoSave:			menutxt "NO SAVE            "
+Txt_DeleteFile:			menutxt "DELETE             "
+Txt_File1:			menutxt "             FILE 1"
+Txt_File2:			menutxt "             FILE 2"
+Txt_File3:			menutxt "             FILE 3"
+Txt_File4:			menutxt "             FILE 4"
+Txt_File5:			menutxt "             FILE 5"
+
 ; =============================================================================
 
 MenuItemLabel 		= 2
@@ -229,6 +259,37 @@ TxtList_ActTransitions:
 	dc.l Txt_On
 	dc.l Txt_Instant
 
+TxtList_SaveDelete:
+	dc.l Txt_Empty
+	dc.l Txt_File1
+	dc.l Txt_File2
+	dc.l Txt_File3
+	dc.l Txt_File4
+	dc.l Txt_File5
+
+TxtList_SaveZones:
+	dc.l Txt_EHZ1
+	dc.l Txt_EHZ2
+	dc.l Txt_CPZ1
+	dc.l Txt_CPZ2
+	dc.l Txt_ARZ1
+	dc.l Txt_ARZ2
+	dc.l Txt_CNZ1
+	dc.l Txt_CNZ2
+	dc.l Txt_HTZ1
+	dc.l Txt_HTZ2
+	dc.l Txt_MCZ1
+	dc.l Txt_MCZ2
+	dc.l Txt_OOZ1
+	dc.l Txt_OOZ2
+	dc.l Txt_MPZ1
+	dc.l Txt_MPZ2
+	dc.l Txt_MPZ3
+	dc.l Txt_SCZ
+	dc.l Txt_WFZ
+	dc.l Txt_DEZ
+	dc.l Txt_Clear
+
 ; =============================================================================
 
 OptionsMenu_Main:
@@ -313,10 +374,11 @@ OptionsMenu_Val_ActTransitions: menuitemdatavalue	1,      Option_ActTransitions,
 ; =============================================================================
 
 OptionsMenu_Emulator:
-	dc.w 2 ; max index
+	dc.w 3 ; max index
 	menuitemdata MenuItemBack,	Txt_Back,               OptionsMenu_Main
 	menuitemdata MenuItemValue, Txt_Scaling,			OptionsMenu_Val_Emulator_Scaling
 	menuitemdata MenuItemValue, Txt_MirrorMode,			OptionsMenu_Val_Emulator_MirrorMode
+	menuitemdata MenuItemBack,	Txt_Back,               OptionsMenu_Saves
 
 OptionsMenu_Val_Emulator_Scaling:   	menuitemdatavalue	2,          Option_Emulator_Scaling,		TxtList_Scaling
 OptionsMenu_Val_Emulator_MirrorMode:	menuitemdatavalue	1,          Option_Emulator_MirrorMode,		TxtList_OffOn
@@ -341,6 +403,25 @@ OptionsMenu_Sound:
 
 OptionsMenu_Val_Music:   	menuitemdatavalue	1,          Option_Music,		TxtList_OnOff
 OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnOff
+
+; =============================================================================
+
+OptionsMenu_Saves:
+	dc.w 6 ; max index
+	menuitemdata MenuItemValue,	        Txt_NoSave,                OptionsMenu_Val_Player
+	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Save_1
+	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Save_2
+	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
+	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
+	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
+	menuitemdata MenuItemValue,	        Txt_DeleteFile,            OptionsMenu_DeleteFile
+
+OptionsMenu_Save_1:	   	menuitemdatavalue	20,          Option_Save1_ZoneSelect,			TxtList_SaveZones
+OptionsMenu_Save_2:	   	menuitemdatavalue	20,          Option_Save2_ZoneSelect,			TxtList_SaveZones
+OptionsMenu_Save_3:	   	menuitemdatavalue	20,          Option_Save3_ZoneSelect,			TxtList_SaveZones
+OptionsMenu_Save_4:	   	menuitemdatavalue	20,          Option_Save4_ZoneSelect,			TxtList_SaveZones
+OptionsMenu_Save_5:	   	menuitemdatavalue	20,          Option_Save5_ZoneSelect,			TxtList_SaveZones
+OptionsMenu_DeleteFile:	   	menuitemdatavalue	5,           Option_Save_DeleteSelect,			TxtList_SaveDelete
 
 ; =============================================================================
 

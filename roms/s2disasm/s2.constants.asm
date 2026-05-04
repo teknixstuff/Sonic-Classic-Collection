@@ -1477,6 +1477,7 @@ Option_Music:			ds.b 1		; 0 = on, 1 = off
 Option_SFX:				ds.b 1		; 0 = on, 1 = off
 
 Option_2PItems:		ds.b 1
+Option_Save_Select: ; dummy
 Option_Emulator_Scaling:	ds.b 1	; 0 = normal, 1 = int scaling
 
 Options_RAM_End:
@@ -1719,6 +1720,18 @@ CutScene:
 EndSeq_Object_RAM_End:
 
 	dephase		; Stop pretending
+	
+; ---------------------------------------------------------------------------
+; Extended RAM variables 
+	phase	ramaddr($FFFE0000)	; Pretend we're in the extended RAM
+ExRAM_Start:
+Option_Save1_ZoneSelect: ds.b 1
+Option_Save2_ZoneSelect: ds.b 1
+Option_Save3_ZoneSelect: ds.b 1
+Option_Save4_ZoneSelect: ds.b 1
+Option_Save5_ZoneSelect: ds.b 1
+Option_Save_DeleteSelect: ds.b 1
+	dephase
 
 	!org	0	; Reset the program counter
 
