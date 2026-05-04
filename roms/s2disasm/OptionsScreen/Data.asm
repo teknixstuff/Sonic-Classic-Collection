@@ -151,6 +151,7 @@ MenuItemValuePlayer = 10
 MenuItemValue2P 	= 12
 MenuItemBack 	    = 14
 MenuItemCredits 	= 16
+MenuItemValueFlip	= 18
 
 menuitemdata_len	= 10
 menuitemdata macro type,txtlabel,otherdataptr
@@ -409,8 +410,8 @@ OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnO
 OptionsMenu_Saves:
 	dc.w 6 ; max index
 	menuitemdata MenuItemValue,	        Txt_NoSave,                OptionsMenu_Val_Player
-	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Save_1
-	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Save_2
+	menuitemdata MenuItemValueFlip,	        Txt_SonicAndTails,         OptionsMenu_Save_1
+	menuitemdata MenuItemValueFlip,	        Txt_SonicAndTails,         OptionsMenu_Save_2
 	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
 	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
 	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player

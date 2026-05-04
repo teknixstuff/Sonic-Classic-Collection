@@ -85,6 +85,8 @@ OptionsScreen_DrawMenuItem_GetLoc:
 
 OptionsScreen_DrawMenuItem:
 	move.w	(a0)+,d4	; d4 = item type
+	cmp.w	#18,d4
+	beq.s OptionsScreen_DrawMenuItem_Flip
 	; Draw Label Text
 	move.l	(a0)+,a1 ; a1 = item label text
 	cmp.w	(Options_menu_selection).l,d6
@@ -101,6 +103,26 @@ OptionsScreen_DrawMenuItemDeselected:
 	bsr.w	OptionsScreen_DrawLabelDeselected
 	bsr.w	OptionsScreen_GetValTextPtr
 	bsr.w	OptionsScreen_DrawValueDeselected
+	bsr.s	OptionsScreen_DrawMenuItem_GetLoc
+	bra.w	OptionsScreen_DrawBoxDeselected
+	
+OptionsScreen_DrawMenuItem_Flip:
+	; Draw Label Text
+	move.l	(a0)+,a1 ; a1 = item label text
+	cmp.w	(Options_menu_selection).l,d6
+	bne.s	OptionsScreen_DrawMenuItemDeselected_Flip
+	
+OptionsScreen_DrawMenuItemSelected_Flip:
+	bsr.w	OptionsScreen_DrawValueSelected
+	bsr.w	OptionsScreen_GetValTextPtr
+	bsr.w	OptionsScreen_DrawLabelSelected
+	bsr.s	OptionsScreen_DrawMenuItem_GetLoc
+	bra.w	OptionsScreen_DrawBoxSelected
+
+OptionsScreen_DrawMenuItemDeselected_Flip:
+	bsr.w	OptionsScreen_DrawValueDeselected
+	bsr.w	OptionsScreen_GetValTextPtr
+	bsr.w	OptionsScreen_DrawLabelDeselected
 	bsr.s	OptionsScreen_DrawMenuItem_GetLoc
 	bra.w	OptionsScreen_DrawBoxDeselected
 
@@ -124,6 +146,7 @@ OptionsScreen_GetValTextPtr_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 12 (MenuItemValue2P)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 16 (MenuItemCredits)
+	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 18 (MenuItemValueFlip)
 
 OptionsScreen_GetValTextPtr_Null:
 	move.l	#Txt_Empty,a1
@@ -203,6 +226,7 @@ OptionsScreen_Input_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue2P ; 12 (MenuItemValue2P)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemBack ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemCredits ; 16 (MenuItemCredits)
+	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue ; 18 (MenuItemValueFlip)
 
 OptionsScreen_Input_Null:
 	rts
@@ -235,8 +259,8 @@ OptionsScreen_Input_MenuItemValue2P:
 	btst	#button_start,d0
 	beq.s	OptionsScreen_Input_MenuItemValue
 	; REMOVE THIS ONCE 2P IS READY
-	sfx		sfx_Error
-	rts
+	;sfx		sfx_Error
+	;rts
 	
 	; Start a 2P VS game
 	move.w	#1,(Two_player_mode).w
