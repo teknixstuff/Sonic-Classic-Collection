@@ -111,23 +111,14 @@ Txt_Music:				menutxt "MUSIC              "
 Txt_SFX:				menutxt "SOUND EFFECTS      "
 Txt_SoundOptions:		menutxt "SOUND OPTIONS      "
 
-Txt_EHZ1:			menutxt "EMERALD HILL      1"
-Txt_EHZ2:			menutxt "EMERALD HILL      2"
-Txt_CPZ1:			menutxt "CHEMICAL PLANT    1"
-Txt_CPZ2:			menutxt "CHEMICAL PLANT    2"
-Txt_ARZ1:			menutxt "AQUATIC RUIN      1"
-Txt_ARZ2:			menutxt "AQUATIC RUIN      2"
-Txt_CNZ1:			menutxt "CASINO NIGHT      1"
-Txt_CNZ2:			menutxt "CASINO NIGHT      2"
-Txt_HTZ1:			menutxt "HILL TOP          1"
-Txt_HTZ2:			menutxt "HILL TOP          2"
-Txt_MCZ1:			menutxt "MYSTIC CAVE       1"
-Txt_MCZ2:			menutxt "MYSTIC CAVE       2"
-Txt_OOZ1:			menutxt "OIL OCEAN         1"
-Txt_OOZ2:			menutxt "OIL OCEAN         2"
-Txt_MPZ1:			menutxt "METROPOLIS        1"
-Txt_MPZ2:			menutxt "METROPOLIS        2"
-Txt_MPZ3:			menutxt "METROPOLIS        3"
+Txt_EHZ:			menutxt "EMERALD HILL       "
+Txt_CPZ:			menutxt "CHEMICAL PLANT     "
+Txt_ARZ:			menutxt "AQUATIC RUIN       "
+Txt_CNZ:			menutxt "CASINO NIGHT       "
+Txt_HTZ:			menutxt "HILL TOP           "
+Txt_MCZ:			menutxt "MYSTIC CAVE        "
+Txt_OOZ:			menutxt "OIL OCEAN          "
+Txt_MPZ:			menutxt "METROPOLIS         "
 Txt_SCZ:			menutxt "SKY CHASE          "
 Txt_WFZ:			menutxt "WING FORTRESS      "
 Txt_DEZ:			menutxt "DEATH EGG          "
@@ -279,23 +270,14 @@ TxtList_SaveDelete:
 	dc.l Txt_File5
 
 TxtList_SaveZones:
-	dc.l Txt_EHZ1
-	dc.l Txt_EHZ2
-	dc.l Txt_CPZ1
-	dc.l Txt_CPZ2
-	dc.l Txt_ARZ1
-	dc.l Txt_ARZ2
-	dc.l Txt_CNZ1
-	dc.l Txt_CNZ2
-	dc.l Txt_HTZ1
-	dc.l Txt_HTZ2
-	dc.l Txt_MCZ1
-	dc.l Txt_MCZ2
-	dc.l Txt_OOZ1
-	dc.l Txt_OOZ2
-	dc.l Txt_MPZ1
-	dc.l Txt_MPZ2
-	dc.l Txt_MPZ3
+	dc.l Txt_EHZ
+	dc.l Txt_CPZ
+	dc.l Txt_ARZ
+	dc.l Txt_CNZ
+	dc.l Txt_HTZ
+	dc.l Txt_MCZ
+	dc.l Txt_OOZ
+	dc.l Txt_MPZ
 	dc.l Txt_SCZ
 	dc.l Txt_WFZ
 	dc.l Txt_DEZ
@@ -385,7 +367,7 @@ OptionsMenu_Val_ActTransitions: menuitemdatavalue	1,      Option_ActTransitions,
 ; =============================================================================
 
 OptionsMenu_Emulator:
-	dc.w 3 ; max index
+	dc.w 2 ; max index
 	menuitemdata MenuItemBack,	Txt_Back,               OptionsMenu_Main
 	menuitemdata MenuItemValue, Txt_Scaling,			OptionsMenu_Val_Emulator_Scaling
 	menuitemdata MenuItemValue, Txt_MirrorMode,			OptionsMenu_Val_Emulator_MirrorMode
@@ -418,7 +400,7 @@ OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnO
 
 OptionsMenu_Saves:
 	dc.w 6 ; max index
-	menuitemdata MenuItemValuePlayer,	Txt_NoSave,		OptionsMenu_Val_Player
+	menuitemdata MenuItemNewSave,		Txt_NoSave,		OptionsMenu_Save_0
 	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_1
 	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_2
 	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_3
@@ -426,11 +408,12 @@ OptionsMenu_Saves:
 	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_5
 	menuitemdata MenuItemDeleteSave,	Txt_DeleteFile,		OptionsMenu_DeleteFile
 
-OptionsMenu_Save_1:	   	menuitemdatasave	20,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
-OptionsMenu_Save_2:	   	menuitemdatasave	20,	Option_Save2_UserSelect,	TxtList_SaveZones,	2
-OptionsMenu_Save_3:	   	menuitemdatasave	4,	Option_Save3_UserSelect,	TxtList_CharacterUE,	3
-OptionsMenu_Save_4:	   	menuitemdatasave	4,	Option_Save4_UserSelect,	TxtList_CharacterUE,	4
-OptionsMenu_Save_5:	   	menuitemdatasave	4,	Option_Save5_UserSelect,	TxtList_CharacterUE,	5
+OptionsMenu_Save_0:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	4
+OptionsMenu_Save_1:	   	menuitemdatasave	11,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
+OptionsMenu_Save_2:	   	menuitemdatasave	11,	Option_Save2_UserSelect,	TxtList_SaveZones,	2
+OptionsMenu_Save_3:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	3
+OptionsMenu_Save_4:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	4
+OptionsMenu_Save_5:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	5
 OptionsMenu_DeleteFile:	   	menuitemdatavalue	5,	Option_Save_DeleteSelect,	TxtList_SaveDelete
 
 ; =============================================================================

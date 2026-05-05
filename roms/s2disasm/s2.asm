@@ -4021,7 +4021,7 @@ TitleScreen_Loop:
 	move.b	(Title_screen_option).w,d0
 	bne.s	TitleScreen_CheckIfChose2P	; branch if not a 1-player game
 
-	move.b	#GameModeID_DataSelect,(Game_Mode).w ; => SavessMenu
+	move.b	#GameModeID_DataSelect,(Game_Mode).w ; => DataSelectMenu
 	rts
 ; ===========================================================================
 ; loc_3CF6:

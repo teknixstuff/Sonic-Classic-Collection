@@ -123,7 +123,7 @@ OptionsScreen_DrawMenuItemDeselected_Flip:
 	bsr.w	OptionsScreen_DrawValueDeselected
 	bsr.w	OptionsScreen_GetValTextPtr
 	bsr.w	OptionsScreen_DrawLabelDeselected
-	bsr.s	OptionsScreen_DrawMenuItem_GetLoc
+	bsr.w	OptionsScreen_DrawMenuItem_GetLoc
 	bra.w	OptionsScreen_DrawBoxDeselected
 
 ; ===========================================================================
@@ -147,10 +147,16 @@ OptionsScreen_GetValTextPtr_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 16 (MenuItemCredits)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 18 (MenuItemSave)
-	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 20 (MenuItemNewSave)
+	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemNewSave ; 20 (MenuItemNewSave)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 22 (MenuItemDeleteSave)
 
 OptionsScreen_GetValTextPtr_Null:
+	move.l	#Txt_Empty,a1
+	rts
+	
+OptionsScreen_GetValTextPtr_MenuItemNewSave:
+	cmp.w	(Options_menu_selection).l,d6
+	beq.s	OptionsScreen_GetValTextPtr_MenuItemValue
 	move.l	#Txt_Empty,a1
 	rts
 
@@ -245,6 +251,14 @@ OptionsScreen_Input_MenuItemNewSave:
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
+	
+	cmp.b	#0,(Current_save_file).l	; is saving disabled?
+	bne.s	+			; if not, branch
+	btst	#button_A,(Ctrl_1_Held).w ; is A held down?
+	beq.s	+	 		; if not, branch
+	move.b	#GameModeID_LevelSelect,(Game_Mode).w ; => LevelSelectMen
+	rts
++
 	move.w	#0,(Current_ZoneAndAct).w	; emerald_hill_zone_act_1
 	move.w	#0,(Apparent_ZoneAndAct).w
 	move.b	#GameModeID_Level,(Game_Mode).w ; => Level (Zone play mode)
@@ -392,6 +406,7 @@ OptionsScreen_Input_MenuItemCredits:
 
 MenuScreen_DataSelect:
 	move.l	#OptionsMenu_Saves,(Options_menu_pointer).l
+	move.b	#GameModeID_OptionsMenu,(Game_Mode).w ; => OptionsMenu
 	bra.s MenuScreen_Init
 
 ; loc_8FCC:
