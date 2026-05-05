@@ -146,7 +146,9 @@ OptionsScreen_GetValTextPtr_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 12 (MenuItemValue2P)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_GetValTextPtr_Null ; 16 (MenuItemCredits)
-	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 18 (MenuItemValueFlip)
+	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 18 (MenuItemSave)
+	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 20 (MenuItemNewSave)
+	offsetTableEntry.w	OptionsScreen_GetValTextPtr_MenuItemValue ; 22 (MenuItemDeleteSave)
 
 OptionsScreen_GetValTextPtr_Null:
 	move.l	#Txt_Empty,a1
@@ -226,9 +228,25 @@ OptionsScreen_Input_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue2P ; 12 (MenuItemValue2P)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemBack ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemCredits ; 16 (MenuItemCredits)
-	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue ; 18 (MenuItemValueFlip)
+	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue ; 18 (MenuItemSave)
+	offsetTableEntry.w	OptionsScreen_Input_MenuItemNewSave ; 20 (MenuItemNewSave)
+	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue ; 22 (MenuItemDeleteSave)
 
 OptionsScreen_Input_Null:
+	rts
+	
+OptionsScreen_Input_MenuItemNewSave:
+	move.b	(Ctrl_1_Press).w,d0
+	or.b	(Ctrl_2_Press).w,d0
+	btst	#button_start,d0
+	beq.l	OptionsScreen_Input_MenuItemValue
+	move.b	$A(a0),(Current_save_file).l
+	; Start a single player game
+	move.w	#0,(Two_player_mode).w
+	move.w	#0,(Two_player_mode_copy).w
+	move.w	#0,(Current_ZoneAndAct).w	; emerald_hill_zone_act_1
+	move.w	#0,(Apparent_ZoneAndAct).w
+	move.b	#GameModeID_Level,(Game_Mode).w ; => Level (Zone play mode)
 	rts
 
 OptionsScreen_Input_MenuItemValuePlayer:
@@ -388,7 +406,7 @@ MenuScreen_Options:
 	lea	(Anim_SonicMilesBG).l,a2
 	jsrto	(Dynamic_Normal).l, JmpTo2_Dynamic_Normal
 	moveq	#PalID_Menu,d0
-	bsr.w	PalLoad_ForFade
+	jsr		PalLoad_ForFade
 	clr.w	(Two_player_mode).w
 	clr.l	(Camera_X_pos).w
 	clr.l	(Camera_Y_pos).w

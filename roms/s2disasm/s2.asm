@@ -3856,6 +3856,7 @@ TitleScreen:
 	clearRAM Object_RAM,Object_RAM_End		; fill object RAM with 0
 	clearRAM Misc_Variables,Misc_Variables_End	; clear CPU player RAM and following variables
 	clearRAM Camera_RAM,Camera_RAM_End		; clear camera RAM and following variables
+	clearRAM Save_manager,Save_manager_end
 
 	move.l	#vdpComm(tiles_to_bytes(ArtTile_ArtNem_CreditText),VRAM,WRITE),(VDP_control_port).l
 	lea	(ArtNem_CreditText).l,a0

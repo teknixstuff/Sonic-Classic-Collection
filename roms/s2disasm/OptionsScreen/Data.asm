@@ -147,11 +147,13 @@ MenuItemLabel 		= 2
 MenuItemValue 		= 4
 MenuItemSub 		= 6
 MenuItemSound 		= 8
-MenuItemValuePlayer = 10
+MenuItemValuePlayer	= 10
 MenuItemValue2P 	= 12
-MenuItemBack 	    = 14
+MenuItemBack 	  	= 14
 MenuItemCredits 	= 16
-MenuItemValueFlip	= 18
+MenuItemSave		= 18
+MenuItemNewSave		= 20
+MenuItemDeleteSave	= 22
 
 menuitemdata_len	= 10
 menuitemdata macro type,txtlabel,otherdataptr
@@ -163,6 +165,14 @@ menuitemdatavalue_len	= 10
 menuitemdatavalue macro maxval,address,txtlist
 	dc.w maxval
 	dc.l address,txtlist
+	endm
+
+menuitemdatasave_len	= 12
+menuitemdatasave macro maxval,address,txtlist,index
+	dc.w maxval
+	dc.l address,txtlist
+	dc.b index
+	even
 	endm
 
 ; ===========================================================================
@@ -409,20 +419,20 @@ OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnO
 
 OptionsMenu_Saves:
 	dc.w 6 ; max index
-	menuitemdata MenuItemValue,	        Txt_NoSave,                OptionsMenu_Val_Player
-	menuitemdata MenuItemValueFlip,	        Txt_SonicAndTails,         OptionsMenu_Save_1
-	menuitemdata MenuItemValueFlip,	        Txt_SonicAndTails,         OptionsMenu_Save_2
-	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
-	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
-	menuitemdata MenuItemValue,	        Txt_NewFile,               OptionsMenu_Val_Player
-	menuitemdata MenuItemValue,	        Txt_DeleteFile,            OptionsMenu_DeleteFile
+	menuitemdata MenuItemNewSave,	        Txt_NoSave,                OptionsMenu_Val_Player
+	menuitemdata MenuItemSave,	        Txt_SonicAndTails,         OptionsMenu_Save_1
+	menuitemdata MenuItemSave,	        Txt_SonicAndTails,         OptionsMenu_Save_2
+	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_3
+	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_4
+	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_5
+	menuitemdata MenuItemDeleteSave,        Txt_DeleteFile,            OptionsMenu_DeleteFile
 
-OptionsMenu_Save_1:	   	menuitemdatavalue	20,          Option_Save1_ZoneSelect,			TxtList_SaveZones
-OptionsMenu_Save_2:	   	menuitemdatavalue	20,          Option_Save2_ZoneSelect,			TxtList_SaveZones
-OptionsMenu_Save_3:	   	menuitemdatavalue	20,          Option_Save3_ZoneSelect,			TxtList_SaveZones
-OptionsMenu_Save_4:	   	menuitemdatavalue	20,          Option_Save4_ZoneSelect,			TxtList_SaveZones
-OptionsMenu_Save_5:	   	menuitemdatavalue	20,          Option_Save5_ZoneSelect,			TxtList_SaveZones
-OptionsMenu_DeleteFile:	   	menuitemdatavalue	5,           Option_Save_DeleteSelect,			TxtList_SaveDelete
+OptionsMenu_Save_1:	   	menuitemdatasave	20,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
+OptionsMenu_Save_2:	   	menuitemdatasave	20,	Option_Save2_UserSelect,	TxtList_SaveZones,	2
+OptionsMenu_Save_3:	   	menuitemdatasave	4,	Option_Save3_UserSelect,	TxtList_CharacterUE,	3
+OptionsMenu_Save_4:	   	menuitemdatasave	4,	Option_Save4_UserSelect,	TxtList_CharacterUE,	4
+OptionsMenu_Save_5:	   	menuitemdatasave	4,	Option_Save5_UserSelect,	TxtList_CharacterUE,	5
+OptionsMenu_DeleteFile:	   	menuitemdatavalue	5,	Option_Save_DeleteSelect,	TxtList_SaveDelete
 
 ; =============================================================================
 

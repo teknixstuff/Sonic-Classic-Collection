@@ -1725,12 +1725,34 @@ EndSeq_Object_RAM_End:
 ; Extended RAM variables 
 	phase	ramaddr($FFFE0000)	; Pretend we're in the extended RAM
 ExRAM_Start:
-Option_Save1_ZoneSelect: ds.b 1
-Option_Save2_ZoneSelect: ds.b 1
-Option_Save3_ZoneSelect: ds.b 1
-Option_Save4_ZoneSelect: ds.b 1
-Option_Save5_ZoneSelect: ds.b 1
+Save_manager:
+Current_save_file: ds.b 1
+Option_Save1_UserSelect: ds.b 1
+Option_Save2_UserSelect: ds.b 1
+Option_Save3_UserSelect: ds.b 1
+Option_Save4_UserSelect: ds.b 1
+Option_Save5_UserSelect: ds.b 1
 Option_Save_DeleteSelect: ds.b 1
+OptionsMenu_Saves_Mem: ds.w 1
+OptionsMenu_Save0_MenuType: ds.w 1
+OptionsMenu_Save0_MenuLabel: ds.l 1
+OptionsMenu_Save0_MenuOption: ds.l 1
+OptionsMenu_Save1_MenuType: ds.w 1
+OptionsMenu_Save1_MenuLabel: ds.l 1
+OptionsMenu_Save1_MenuOption: ds.l 1
+OptionsMenu_Save2_MenuType: ds.w 1
+OptionsMenu_Save2_MenuLabel: ds.l 1
+OptionsMenu_Save2_MenuOption: ds.l 1
+OptionsMenu_Save3_MenuType: ds.w 1
+OptionsMenu_Save3_MenuLabel: ds.l 1
+OptionsMenu_Save3_MenuOption: ds.l 1
+OptionsMenu_Save4_MenuType: ds.w 1
+OptionsMenu_Save4_MenuLabel: ds.l 1
+OptionsMenu_Save4_MenuOption: ds.l 1
+OptionsMenu_Save5_MenuType: ds.w 1
+OptionsMenu_Save5_MenuLabel: ds.l 1
+OptionsMenu_Save5_MenuOption: ds.l 1
+Save_manager_end:
 	dephase
 
 	!org	0	; Reset the program counter
