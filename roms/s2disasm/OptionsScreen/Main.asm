@@ -240,6 +240,7 @@ OptionsScreen_Input_MenuItemNewSave:
 	or.b	(Ctrl_2_Press).w,d0
 	btst	#button_start,d0
 	beq.l	OptionsScreen_Input_MenuItemValue
+	; Set save index
 	move.b	$A(a0),(Current_save_file).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
@@ -254,6 +255,8 @@ OptionsScreen_Input_MenuItemValuePlayer:
 	or.b	(Ctrl_2_Press).w,d0
 	btst	#button_start,d0
 	beq.s	OptionsScreen_Input_MenuItemValue
+	; No save file
+	move.b	#0,(Current_save_file).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
@@ -387,9 +390,14 @@ OptionsScreen_Input_MenuItemCredits:
 
 ; ===========================================================================
 
+MenuScreen_DataSelect:
+	move.l	#OptionsMenu_Saves,(Options_menu_pointer).l
+	bra.s MenuScreen_Init
+
 ; loc_8FCC:
 MenuScreen_Options:
 	move.l	#OptionsMenu_Main,(Options_menu_pointer).l
+MenuScreen_Init:
 	clr.b	(Options_menu_selection).w
 
 	; Load tile graphics

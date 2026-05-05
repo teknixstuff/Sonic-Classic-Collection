@@ -454,6 +454,7 @@ GameMode_2PLevelSelect:	bra.w	LevelSelectMenu2P	; 2P level select mode
 GameMode_EndingSequence:bra.w	JmpTo_EndingSequence	; End sequence mode
 GameMode_OptionsMenu:	bra.w	OptionsMenu		; Options mode
 GameMode_LevelSelect:	bra.w	LevelSelectMenu		; Level select mode
+GameMode_DataSelect:	bra.w	DataSelectMenu		; Data select mode
 ; ===========================================================================
 ;    if skipChecksumCheck=0	; checksum error code
 ; loc_3CE:
@@ -486,6 +487,10 @@ JmpTo_TwoPlayerResults ; JmpTo
 ; ===========================================================================
 ; loc_3FC:
 OptionsMenu: ;;
+	jmp	(MenuScreen).l
+; ===========================================================================
+; loc_3FC:
+DataSelectMenu: ;;
 	jmp	(MenuScreen).l
 ; ===========================================================================
 ; loc_402:
@@ -4016,27 +4021,7 @@ TitleScreen_Loop:
 	move.b	(Title_screen_option).w,d0
 	bne.s	TitleScreen_CheckIfChose2P	; branch if not a 1-player game
 
-	moveq	#0,d0
-	move.w	d0,(Two_player_mode_copy).w
-	move.w	d0,(Two_player_mode).w
-    if emerald_hill_zone_act_1=0
-	move.w	d0,(Current_ZoneAndAct).w ; emerald_hill_zone_act_1
-	move.w	d0,(Apparent_ZoneAndAct).w ; emerald_hill_zone_act_1
-    else
-	move.w	#emerald_hill_zone_act_1,(Current_ZoneAndAct).w
-    endif
-	tst.b	(Level_select_flag).w	; has level select cheat been entered?
-	beq.s	+			; if not, branch
-	btst	#button_A,(Ctrl_1_Held).w ; is A held down?
-	beq.s	+	 		; if not, branch
-	move.b	#GameModeID_LevelSelect,(Game_Mode).w ; => LevelSelectMenu
-	rts
-; ---------------------------------------------------------------------------
-+
-	move.w	d0,(Current_Special_StageAndAct).w
-	move.w	d0,(Got_Emerald).w
-	move.l	d0,(Got_Emeralds_array).w
-	move.l	d0,(Got_Emeralds_array+4).w
+	move.b	#GameModeID_DataSelect,(Game_Mode).w ; => SavessMenu
 	rts
 ; ===========================================================================
 ; loc_3CF6:
@@ -11363,6 +11348,9 @@ MenuScreen:
 
 	cmpi.b	#GameModeID_OptionsMenu,(Game_Mode).w	; options menu?
 	beq.w	MenuScreen_Options	; if yes, branch
+	
+	cmpi.b	#GameModeID_DataSelect,(Game_Mode).w	; saves menu?
+	beq.w	MenuScreen_DataSelect	; if yes, branch
 
 	cmpi.b	#GameModeID_LevelSelect,(Game_Mode).w	; level select menu?
 	beq.w	MenuScreen_LevelSelect	; if yes, branch

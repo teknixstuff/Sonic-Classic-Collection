@@ -389,7 +389,6 @@ OptionsMenu_Emulator:
 	menuitemdata MenuItemBack,	Txt_Back,               OptionsMenu_Main
 	menuitemdata MenuItemValue, Txt_Scaling,			OptionsMenu_Val_Emulator_Scaling
 	menuitemdata MenuItemValue, Txt_MirrorMode,			OptionsMenu_Val_Emulator_MirrorMode
-	menuitemdata MenuItemBack,	Txt_Back,               OptionsMenu_Saves
 
 OptionsMenu_Val_Emulator_Scaling:   	menuitemdatavalue	2,          Option_Emulator_Scaling,		TxtList_Scaling
 OptionsMenu_Val_Emulator_MirrorMode:	menuitemdatavalue	1,          Option_Emulator_MirrorMode,		TxtList_OffOn
@@ -419,13 +418,13 @@ OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnO
 
 OptionsMenu_Saves:
 	dc.w 6 ; max index
-	menuitemdata MenuItemNewSave,	        Txt_NoSave,                OptionsMenu_Val_Player
-	menuitemdata MenuItemSave,	        Txt_SonicAndTails,         OptionsMenu_Save_1
-	menuitemdata MenuItemSave,	        Txt_SonicAndTails,         OptionsMenu_Save_2
-	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_3
-	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_4
-	menuitemdata MenuItemNewSave,	        Txt_NewFile,               OptionsMenu_Save_5
-	menuitemdata MenuItemDeleteSave,        Txt_DeleteFile,            OptionsMenu_DeleteFile
+	menuitemdata MenuItemValuePlayer,	Txt_NoSave,		OptionsMenu_Val_Player
+	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_1
+	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_2
+	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_3
+	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_4
+	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_5
+	menuitemdata MenuItemDeleteSave,	Txt_DeleteFile,		OptionsMenu_DeleteFile
 
 OptionsMenu_Save_1:	   	menuitemdatasave	20,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
 OptionsMenu_Save_2:	   	menuitemdatasave	20,	Option_Save2_UserSelect,	TxtList_SaveZones,	2

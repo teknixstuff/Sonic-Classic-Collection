@@ -458,6 +458,7 @@ GameModeID_2PLevelSelect =	id(GameMode_2PLevelSelect) ; 1C
 GameModeID_EndingSequence =	id(GameMode_EndingSequence) ; 20
 GameModeID_OptionsMenu =	id(GameMode_OptionsMenu) ; 24
 GameModeID_LevelSelect =	id(GameMode_LevelSelect) ; 28
+GameModeID_DataSelect =	id(GameMode_DataSelect) ; 32
 GameModeFlag_TitleCard =	7 ; flag bit
 GameModeID_TitleCard =		1<<GameModeFlag_TitleCard ; flag mask
 
