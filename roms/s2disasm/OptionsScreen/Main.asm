@@ -414,27 +414,35 @@ MenuScreen_DataSelect:
 	move.l	#OptionsMenu_Saves_Mem,(Options_menu_pointer).l
 	move.b	#GameModeID_OptionsMenu,(Game_Mode).w ; => OptionsMenu
 	move.w	#6, (OptionsMenu_Saves_Mem).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save0_MenuType).l
 	move.l	#Txt_NoSave, (OptionsMenu_Save0_MenuLabel).l
 	move.l	#OptionsMenu_Save_0, (OptionsMenu_Save0_MenuOption).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save1_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save1_MenuLabel).l
 	move.l	#OptionsMenu_Save1_ItemCount, (OptionsMenu_Save1_MenuOption).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save2_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save2_MenuLabel).l
 	move.l	#OptionsMenu_Save2_ItemCount, (OptionsMenu_Save2_MenuOption).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save3_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save3_MenuLabel).l
 	move.l	#OptionsMenu_Save3_ItemCount, (OptionsMenu_Save3_MenuOption).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save4_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save4_MenuLabel).l
 	move.l	#OptionsMenu_Save4_ItemCount, (OptionsMenu_Save4_MenuOption).l
+	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save5_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save5_MenuLabel).l
 	move.l	#OptionsMenu_Save5_ItemCount, (OptionsMenu_Save5_MenuOption).l
+	
 	move.w	#MenuItemDeleteSave, (OptionsMenu_DeleteFile_MenuType).l
 	move.l	#Txt_DeleteFile, (OptionsMenu_DeleteFile_MenuLabel).l
 	move.l	#OptionsMenu_DeleteFile, (OptionsMenu_DeleteFile_MenuOption).l
+	
 	move.w	#1, (OptionsMenu_Save1_ItemIndex).l
 	move.w	#2, (OptionsMenu_Save2_ItemIndex).l
 	move.w	#3, (OptionsMenu_Save3_ItemIndex).l
@@ -445,16 +453,16 @@ MenuScreen_DataSelect:
 	move.l	#Option_Save3_UserSelect, (OptionsMenu_Save3_ItemValue).l
 	move.l	#Option_Save4_UserSelect, (OptionsMenu_Save4_ItemValue).l
 	move.l	#Option_Save5_UserSelect, (OptionsMenu_Save5_ItemValue).l
-	move.l	#4, (OptionsMenu_Save1_ItemCount).l
-	move.w	#TxtList_CharacterUE, (OptionsMenu_Save1_ItemList).l
-	move.l	#4, (OptionsMenu_Save2_ItemCount).l
-	move.w	#TxtList_CharacterUE, (OptionsMenu_Save2_ItemList).l
-	move.l	#4, (OptionsMenu_Save3_ItemCount).l
-	move.w	#TxtList_CharacterUE, (OptionsMenu_Save3_ItemList).l
-	move.l	#4, (OptionsMenu_Save4_ItemCount).l
-	move.w	#TxtList_CharacterUE, (OptionsMenu_Save4_ItemList).l
-	move.l	#4, (OptionsMenu_Save5_ItemCount).l
-	move.w	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
+	move.w	#4, (OptionsMenu_Save1_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save1_ItemList).l
+	move.w	#4, (OptionsMenu_Save2_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save2_ItemList).l
+	move.w	#4, (OptionsMenu_Save3_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save3_ItemList).l
+	move.w	#4, (OptionsMenu_Save4_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save4_ItemList).l
+	move.w	#4, (OptionsMenu_Save5_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
 	bra.s MenuScreen_Init
 
 ; loc_8FCC:
