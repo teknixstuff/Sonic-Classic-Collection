@@ -398,23 +398,23 @@ OptionsMenu_Val_SFX:	   	menuitemdatavalue	1,          Option_SFX,			TxtList_OnO
 
 ; =============================================================================
 
-OptionsMenu_Saves:
-	dc.w 6 ; max index
-	menuitemdata MenuItemNewSave,		Txt_NoSave,		OptionsMenu_Save_0
-	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_1
-	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_2
-	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_3
-	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_4
-	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_5
-	menuitemdata MenuItemDeleteSave,	Txt_DeleteFile,		OptionsMenu_DeleteFile
-
-OptionsMenu_Save_0:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	4
-OptionsMenu_Save_1:	   	menuitemdatasave	11,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
-OptionsMenu_Save_2:	   	menuitemdatasave	11,	Option_Save2_UserSelect,	TxtList_SaveZones,	2
-OptionsMenu_Save_3:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	3
-OptionsMenu_Save_4:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	4
-OptionsMenu_Save_5:	   	menuitemdatasave	4,	Player_option,			TxtList_CharacterUE,	5
-OptionsMenu_DeleteFile:	   	menuitemdatavalue	5,	Option_Save_DeleteSelect,	TxtList_SaveDelete
+;OptionsMenu_Saves:
+;	dc.w 6 ; max index;
+;	menuitemdata MenuItemNewSave,		Txt_NoSave,		OptionsMenu_Save_0
+;	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_1
+;	menuitemdata MenuItemSave,		Txt_SonicAndTails,	OptionsMenu_Save_2
+;	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_3
+;	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_4
+;	menuitemdata MenuItemNewSave,		Txt_NewFile,		OptionsMenu_Save_5
+;	menuitemdata MenuItemDeleteSave,	Txt_DeleteFile,		OptionsMenu_DeleteFile
+;
+OptionsMenu_Save_0:	   	menuitemdatasave	4,	Option_Save0_UserSelect,	TxtList_CharacterUE,	0
+;OptionsMenu_Save_1:	   	menuitemdatasave	11,	Option_Save1_UserSelect,	TxtList_SaveZones,	1
+;OptionsMenu_Save_2:	   	menuitemdatasave	11,	Option_Save2_UserSelect,	TxtList_SaveZones,	2
+;OptionsMenu_Save_3:	   	menuitemdatasave	4,	Option_Save3_UserSelect,	TxtList_CharacterUE,	3
+;OptionsMenu_Save_4:	   	menuitemdatasave	4,	Option_Save4_UserSelect,	TxtList_CharacterUE,	4
+;OptionsMenu_Save_5:	   	menuitemdatasave	4,	Option_Save5_UserSelect,	TxtList_CharacterUE,	5
+OptionsMenu_DeleteFile: 	menuitemdatavalue	5,	Option_Save_DeleteSelect,	TxtList_SaveDelete
 
 ; =============================================================================
 

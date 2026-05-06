@@ -1728,6 +1728,7 @@ EndSeq_Object_RAM_End:
 ExRAM_Start:
 Save_manager:
 Current_save_file: ds.b 1
+Option_Save0_UserSelect: ds.b 1
 Option_Save1_UserSelect: ds.b 1
 Option_Save2_UserSelect: ds.b 1
 Option_Save3_UserSelect: ds.b 1
@@ -1753,6 +1754,29 @@ OptionsMenu_Save4_MenuOption: ds.l 1
 OptionsMenu_Save5_MenuType: ds.w 1
 OptionsMenu_Save5_MenuLabel: ds.l 1
 OptionsMenu_Save5_MenuOption: ds.l 1
+OptionsMenu_DeleteFile_MenuType: ds.w 1
+OptionsMenu_DeleteFile_MenuLabel: ds.l 1
+OptionsMenu_DeleteFile_MenuOption: ds.l 1
+OptionsMenu_Save1_ItemCount: ds.w 1
+OptionsMenu_Save1_ItemValue: ds.l 1
+OptionsMenu_Save1_ItemList: ds.l 1
+OptionsMenu_Save1_ItemIndex: ds.w 1
+OptionsMenu_Save2_ItemCount: ds.w 1
+OptionsMenu_Save2_ItemValue: ds.l 1
+OptionsMenu_Save2_ItemList: ds.l 1
+OptionsMenu_Save2_ItemIndex: ds.w 1
+OptionsMenu_Save3_ItemCount: ds.w 1
+OptionsMenu_Save3_ItemValue: ds.l 1
+OptionsMenu_Save3_ItemList: ds.l 1
+OptionsMenu_Save3_ItemIndex: ds.w 1
+OptionsMenu_Save4_ItemCount: ds.w 1
+OptionsMenu_Save4_ItemValue: ds.l 1
+OptionsMenu_Save4_ItemList: ds.l 1
+OptionsMenu_Save4_ItemIndex: ds.w 1
+OptionsMenu_Save5_ItemCount: ds.w 1
+OptionsMenu_Save5_ItemValue: ds.l 1
+OptionsMenu_Save5_ItemList: ds.l 1
+OptionsMenu_Save5_ItemIndex: ds.w 1
 Save_manager_end:
 	dephase
 
