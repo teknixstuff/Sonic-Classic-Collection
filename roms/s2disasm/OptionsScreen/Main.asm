@@ -244,26 +244,28 @@ OptionsScreen_Input_MenuItemDeleteSave:
 	bne.s	OptionsScreen_Input_MenuItemDeleteSave_Confirm
 	cmp.b	#0,(Option_Save_DeleteSelect).l
 	beq.s	OptionsScreen_Input_MenuItemDeleteSave_Skip
-	move.w	(Option_Save_DeleteSelect).l,(Current_save_file).l
+	move.b	(Option_Save_DeleteSelect).l,(Current_save_file).l
 	move.l	#OptionsMenu_DeleteFileConf,(OptionsMenu_DeleteFile_MenuOption).l
-	move.w	#0,(Option_Save_DeleteSelect).l
+	move.b	#0,(Option_Save_DeleteSelect).l
 	
 OptionsScreen_Input_MenuItemDeleteSave_Skip:
 	rts
 	
 OptionsScreen_Input_MenuItemDeleteSave_Confirm:
 	clr.l	d0
-	cmp.w	#0, (Option_Save_DeleteSelect).l
+	cmp.b	#0, (Option_Save_DeleteSelect).l
 	beq.s	OptionsScreen_Input_MenuItemDeleteSave_Cancel
-	move.w	(Current_save_file).l,d0
-	lsl.w	#2, d0
-	move.l	#DataFile_Headers, a0
-	move.l	(a0, d0.l),a0
+	clr.w	d0
+	move.b	(Current_save_file).l,d0
+	subi.w	#1,d0
+	lsl.w	#2,d0
+	move.l	#DataFile_Headers,a0
+	move.l	(a0,d0.w),a0
 	move.b	#0,(a0)
 	
 OptionsScreen_Input_MenuItemDeleteSave_Cancel:
 	move.l	#OptionsMenu_DeleteFile,(OptionsMenu_DeleteFile_MenuOption).l
-	move.w	#0,(Option_Save_DeleteSelect).l
+	move.b	#0,(Option_Save_DeleteSelect).l
 	bsr.w	MenuScreen_DataSelect_LoadItems
 	rts
 
@@ -275,7 +277,7 @@ OptionsScreen_Input_MenuItemSave:
 	; Set save index
 	clr.l	d0
 	move.b	$A(a0),d0
-	move.w	d0,(Current_save_file).l
+	move.b	d0,(Current_save_file).l
 	; Set player
 	move.l	#DataFile_Headers, a0
 	move.l	(a0, d0.w),a0
@@ -290,6 +292,7 @@ OptionsScreen_Input_MenuItemSave:
 	clr.w	d1
 	move.b	(a0),d1
 	subi.b	#1,d1
+	lsl.b	#1,d1
 	move.l	#DataFile_Zones,a0
 	move.w	(a0, d1.w),d1
 	move.w	d1,(Current_ZoneAndAct).w
@@ -305,7 +308,7 @@ OptionsScreen_Input_MenuItemNewSave:
 	; Set save index
 	clr.w	d0
 	move.b	$A(a0),d0
-	move.w	d0,(Current_save_file).l
+	move.b	d0,(Current_save_file).l
 	; Set player
 	move.l	$2(a0),a1
 	move.b	(a1),(Player_option).l
@@ -313,7 +316,7 @@ OptionsScreen_Input_MenuItemNewSave:
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
 	
-	cmp.w	#0,(Current_save_file).l	; is saving disabled?
+	cmp.b	#0,(Current_save_file).l	; is saving disabled?
 	bne.s	+			; if not, branch
 	btst	#button_A,(Ctrl_1_Held).w ; is A held down?
 	beq.s	+	 		; if not, branch
@@ -331,7 +334,7 @@ OptionsScreen_Input_MenuItemValuePlayer:
 	btst	#button_start,d0
 	beq.s	OptionsScreen_Input_MenuItemValue
 	; No save file
-	move.w	#0,(Current_save_file).l
+	move.b	#0,(Current_save_file).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
@@ -569,6 +572,38 @@ MenuScreen_DataSelect_Save3Clear:
 	move.w	#11, (OptionsMenu_Save3_ItemCount).l
 
 MenuScreen_DataSelect_Save4Init:
+	move.l	#OptionsMenu_Save4_ItemCount, (OptionsMenu_Save4_MenuOption).l
+	cmpi.b	#0, (DataFile_Save4_Zone).l
+	bne.s	MenuScreen_DataSelect_Save4Valid
+	move.w	#MenuItemNewSave, (OptionsMenu_Save4_MenuType).l
+	move.l	#Txt_NewFile, (OptionsMenu_Save4_MenuLabel).l
+	move.w	#4, (OptionsMenu_Save4_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save4_ItemList).l
+	bra.s	MenuScreen_DataSelect_Save5Init
+	
+MenuScreen_DataSelect_Save4Valid:
+	move.w	#MenuItemSave, (OptionsMenu_Save4_MenuType).l
+	move.l	#TxtList_CharacterUE, a0
+	clr.l	d0
+	move.b	(DataFile_Save4_Player).l, d0
+	lsl.l	#2, d0
+	move.l	(a0, d0), (OptionsMenu_Save4_MenuLabel).l
+	move.l	#TxtList_SaveZones, a0
+	move.b	(DataFile_Save4_Zone).l, d0
+	subi.b	#1, d0
+	lsl.l	#2, d0
+	cmp.l	#Txt_Clear,(a0, d0)
+	beq.s	MenuScreen_DataSelect_Save4Clear
+	adda.l	d0, a0
+	move.l	a0, (OptionsMenu_Save4_ItemList).l
+	move.w	#0, (OptionsMenu_Save4_ItemCount).l
+	bra.s	MenuScreen_DataSelect_Save5Init
+	
+MenuScreen_DataSelect_Save4Clear:
+	move.l	#TxtList_SaveZones, (OptionsMenu_Save4_ItemList).l
+	move.w	#11, (OptionsMenu_Save4_ItemCount).l
+
+MenuScreen_DataSelect_Save5Init:
 	move.w	#MenuItemNewSave, (OptionsMenu_Save4_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save4_MenuLabel).l
 	move.l	#OptionsMenu_Save4_ItemCount, (OptionsMenu_Save4_MenuOption).l
@@ -591,8 +626,6 @@ MenuScreen_DataSelect_Save4Init:
 	move.l	#Option_Save3_UserSelect, (OptionsMenu_Save3_ItemValue).l
 	move.l	#Option_Save4_UserSelect, (OptionsMenu_Save4_ItemValue).l
 	move.l	#Option_Save5_UserSelect, (OptionsMenu_Save5_ItemValue).l
-	move.w	#4, (OptionsMenu_Save4_ItemCount).l
-	move.l	#TxtList_CharacterUE, (OptionsMenu_Save4_ItemList).l
 	move.w	#4, (OptionsMenu_Save5_ItemCount).l
 	move.l	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
 	rts

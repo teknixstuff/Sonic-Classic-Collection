@@ -387,6 +387,14 @@ InitSRAM:
 	movep.l d1,(a0)        ; Write string "SRAM"
 	move.b	#3,(DataFile_Save1_Zone).l
 	move.b	#3,(DataFile_Save1_Player).l
+	move.b	#2,(DataFile_Save2_Zone).l
+	move.b	#2,(DataFile_Save2_Player).l
+	move.b	#5,(DataFile_Save3_Zone).l
+	move.b	#0,(DataFile_Save3_Player).l
+	move.b	#2,(DataFile_Save4_Zone).l
+	move.b	#1,(DataFile_Save4_Player).l
+	move.b	#2,(DataFile_Save5_Zone).l
+	move.b	#1,(DataFile_Save5_Player).l
 	jsr		SaveSRAM
 	
 	; Init defaults here... although ideally they should be all 0

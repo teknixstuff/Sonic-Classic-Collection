@@ -1726,14 +1726,14 @@ EndSeq_Object_RAM_End:
 	phase	ramaddr($FFFE0000)	; Pretend we're in the extended RAM
 ExRAM_Start:
 Save_manager:
-Current_save_file: ds.w 1
-Option_Save0_UserSelect: ds.w 1
-Option_Save1_UserSelect: ds.w 1
-Option_Save2_UserSelect: ds.w 1
-Option_Save3_UserSelect: ds.w 1
-Option_Save4_UserSelect: ds.w 1
-Option_Save5_UserSelect: ds.w 1
-Option_Save_DeleteSelect: ds.w 1
+Current_save_file: ds.b 1
+Option_Save0_UserSelect: ds.b 1
+Option_Save1_UserSelect: ds.b 1
+Option_Save2_UserSelect: ds.b 1
+Option_Save3_UserSelect: ds.b 1
+Option_Save4_UserSelect: ds.b 1
+Option_Save5_UserSelect: ds.b 1
+Option_Save_DeleteSelect: ds.b 1
 OptionsMenu_Saves_Mem: ds.w 1
 OptionsMenu_Save0_MenuType: ds.w 1
 OptionsMenu_Save0_MenuLabel: ds.l 1
