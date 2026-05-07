@@ -385,7 +385,7 @@ InitSRAM:
 	cmp.l   d0,d1            ; Was it already in SRAM?
 	beq.s   LoadSRAM           ; If so, skip
 	movep.l d1,(a0)        ; Write string "SRAM"
-	move.b	#1,(DataFile_Save1_Zone).l
+	move.b	#3,(DataFile_Save1_Zone).l
 	move.b	#3,(DataFile_Save1_Player).l
 	jsr		SaveSRAM
 	
@@ -455,6 +455,19 @@ DataFile_Headers:
 	dc.l DataFile_Save3_Zone
 	dc.l DataFile_Save4_Zone
 	dc.l DataFile_Save5_Zone
+	
+DataFile_Zones:
+	dc.w	emerald_hill_zone_act_1
+	dc.w	chemical_plant_zone_act_1
+	dc.w	aquatic_ruin_zone_act_1
+	dc.w	casino_night_zone_act_1
+	dc.w	hill_top_zone_act_1
+	dc.w	mystic_cave_zone_act_1
+	dc.w	oil_ocean_zone_act_1
+	dc.w	metropolis_zone_act_1
+	dc.w	sky_chase_zone_act_1
+	dc.w	wing_fortress_zone_act_1
+	dc.w	death_egg_zone_act_1
 
 ; ===========================================================================
 

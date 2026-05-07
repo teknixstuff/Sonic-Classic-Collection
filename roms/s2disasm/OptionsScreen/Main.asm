@@ -228,7 +228,7 @@ OptionsScreen_Input_Index:	offsetTable
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue2P ; 12 (MenuItemValue2P)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemBack ; 14 (MenuItemBack)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemCredits ; 16 (MenuItemCredits)
-	offsetTableEntry.w	OptionsScreen_Input_MenuItemValue ; 18 (MenuItemSave)
+	offsetTableEntry.w	OptionsScreen_Input_MenuItemSave ; 18 (MenuItemSave)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemNewSave ; 20 (MenuItemNewSave)
 	offsetTableEntry.w	OptionsScreen_Input_MenuItemDeleteSave ; 22 (MenuItemDeleteSave)
 
@@ -265,6 +265,36 @@ OptionsScreen_Input_MenuItemDeleteSave_Cancel:
 	move.l	#OptionsMenu_DeleteFile,(OptionsMenu_DeleteFile_MenuOption).l
 	move.w	#0,(Option_Save_DeleteSelect).l
 	bsr.w	MenuScreen_DataSelect_LoadItems
+	rts
+
+OptionsScreen_Input_MenuItemSave:
+	move.b	(Ctrl_1_Press).w,d0
+	or.b	(Ctrl_2_Press).w,d0
+	btst	#button_start,d0
+	beq.l	OptionsScreen_Input_MenuItemValue
+	; Set save index
+	clr.l	d0
+	move.b	$A(a0),d0
+	move.w	d0,(Current_save_file).l
+	; Set player
+	move.l	#DataFile_Headers, a0
+	move.l	(a0, d0.w),a0
+	adda.l	#1,a0
+	move.b	(a0),(Player_option).l
+	; Start a single player game
+	move.w	#0,(Two_player_mode).w
+	move.w	#0,(Two_player_mode_copy).w
+	
+	move.l	#DataFile_Headers, a0
+	move.l	(a0, d0.w),a0
+	clr.w	d1
+	move.b	(a0),d1
+	subi.b	#1,d1
+	move.l	#DataFile_Zones,a0
+	move.w	(a0, d1.w),d1
+	move.w	d1,(Current_ZoneAndAct).w
+	move.w	d1,(Apparent_ZoneAndAct).w
+	move.b	#GameModeID_Level,(Game_Mode).w ; => Level (Zone play mode)
 	rts
 	
 OptionsScreen_Input_MenuItemNewSave:
