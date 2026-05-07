@@ -243,12 +243,12 @@ OptionsScreen_Input_MenuItemDeleteSave:
 	cmpa.l	#OptionsMenu_DeleteFile,a0
 	bne.s	OptionsScreen_Input_MenuItemDeleteSave_Confirm
 	move.b	(Option_Save_DeleteSelect).l,(Current_save_file).l
-	move.l	(OptionsMenu_DeleteFile_MenuOption).l,#OptionsMenu_DeleteFileConf
+	move.l	#OptionsMenu_DeleteFileConf,(OptionsMenu_DeleteFile_MenuOption).l
 	move.b	#0,(Option_Save_DeleteSelect).l
 	rts
 	
 OptionsScreen_Input_MenuItemDeleteSave_Confirm:
-	move.l	(OptionsMenu_DeleteFile_MenuOption).l,#OptionsMenu_DeleteFile
+	move.l	#OptionsMenu_DeleteFile,(OptionsMenu_DeleteFile_MenuOption).l
 	move.b	#0,(Option_Save_DeleteSelect).l
 	rts
 	
@@ -259,6 +259,9 @@ OptionsScreen_Input_MenuItemNewSave:
 	beq.l	OptionsScreen_Input_MenuItemValue
 	; Set save index
 	move.b	$A(a0),(Current_save_file).l
+	; Set player
+	move.l	$2(a0),a1
+	move.w	(a1),(Player_option).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
