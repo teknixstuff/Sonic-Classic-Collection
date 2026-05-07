@@ -277,6 +277,9 @@ OptionsScreen_Input_MenuItemSave:
 	; Set save index
 	clr.l	d0
 	move.b	$A(a0),d0
+	move.l	a0,a7
+	move.l	#OptionsMenu_Save1_ItemCount,a1
+	dc.w $FFFF
 	move.b	d0,(Current_save_file).l
 	; Set player
 	move.l	#DataFile_Headers, a0
