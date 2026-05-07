@@ -604,14 +604,38 @@ MenuScreen_DataSelect_Save4Clear:
 	move.w	#11, (OptionsMenu_Save4_ItemCount).l
 
 MenuScreen_DataSelect_Save5Init:
-	move.w	#MenuItemNewSave, (OptionsMenu_Save4_MenuType).l
-	move.l	#Txt_NewFile, (OptionsMenu_Save4_MenuLabel).l
-	move.l	#OptionsMenu_Save4_ItemCount, (OptionsMenu_Save4_MenuOption).l
-	
+	move.l	#OptionsMenu_Save5_ItemCount, (OptionsMenu_Save5_MenuOption).l
+	cmpi.b	#0, (DataFile_Save5_Zone).l
+	bne.s	MenuScreen_DataSelect_Save5Valid
 	move.w	#MenuItemNewSave, (OptionsMenu_Save5_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save5_MenuLabel).l
-	move.l	#OptionsMenu_Save5_ItemCount, (OptionsMenu_Save5_MenuOption).l
+	move.w	#4, (OptionsMenu_Save5_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
+	bra.s	MenuScreen_DataSelect_SaveInitEnd
 	
+MenuScreen_DataSelect_Save5Valid:
+	move.w	#MenuItemSave, (OptionsMenu_Save5_MenuType).l
+	move.l	#TxtList_CharacterUE, a0
+	clr.l	d0
+	move.b	(DataFile_Save5_Player).l, d0
+	lsl.l	#2, d0
+	move.l	(a0, d0), (OptionsMenu_Save5_MenuLabel).l
+	move.l	#TxtList_SaveZones, a0
+	move.b	(DataFile_Save5_Zone).l, d0
+	subi.b	#1, d0
+	lsl.l	#2, d0
+	cmp.l	#Txt_Clear,(a0, d0)
+	beq.s	MenuScreen_DataSelect_Save5Clear
+	adda.l	d0, a0
+	move.l	a0, (OptionsMenu_Save5_ItemList).l
+	move.w	#0, (OptionsMenu_Save5_ItemCount).l
+	bra.s	MenuScreen_DataSelect_SaveInitEnd
+	
+MenuScreen_DataSelect_Save5Clear:
+	move.l	#TxtList_SaveZones, (OptionsMenu_Save5_ItemList).l
+	move.w	#11, (OptionsMenu_Save5_ItemCount).l
+
+MenuScreen_DataSelect_SaveInitEnd:
 	move.w	#MenuItemDeleteSave, (OptionsMenu_DeleteFile_MenuType).l
 	move.l	#Txt_DeleteFile, (OptionsMenu_DeleteFile_MenuLabel).l
 	move.l	#OptionsMenu_DeleteFile, (OptionsMenu_DeleteFile_MenuOption).l
@@ -626,8 +650,6 @@ MenuScreen_DataSelect_Save5Init:
 	move.l	#Option_Save3_UserSelect, (OptionsMenu_Save3_ItemValue).l
 	move.l	#Option_Save4_UserSelect, (OptionsMenu_Save4_ItemValue).l
 	move.l	#Option_Save5_UserSelect, (OptionsMenu_Save5_ItemValue).l
-	move.w	#4, (OptionsMenu_Save5_ItemCount).l
-	move.l	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
 	rts
 
 MenuScreen_DataSelect:

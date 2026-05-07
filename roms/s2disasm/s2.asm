@@ -391,7 +391,7 @@ InitSRAM:
 	move.b	#2,(DataFile_Save2_Player).l
 	move.b	#5,(DataFile_Save3_Zone).l
 	move.b	#0,(DataFile_Save3_Player).l
-	move.b	#2,(DataFile_Save4_Zone).l
+	move.b	#12,(DataFile_Save4_Zone).l
 	move.b	#1,(DataFile_Save4_Player).l
 	move.b	#2,(DataFile_Save5_Zone).l
 	move.b	#1,(DataFile_Save5_Player).l
