@@ -1478,7 +1478,6 @@ Option_Music:			ds.b 1		; 0 = on, 1 = off
 Option_SFX:				ds.b 1		; 0 = on, 1 = off
 
 Option_2PItems:		ds.b 1
-Option_Save_Select: ; dummy
 Option_Emulator_Scaling:	ds.b 1	; 0 = normal, 1 = int scaling
 
 Options_RAM_End:
@@ -1727,14 +1726,14 @@ EndSeq_Object_RAM_End:
 	phase	ramaddr($FFFE0000)	; Pretend we're in the extended RAM
 ExRAM_Start:
 Save_manager:
-Current_save_file: ds.b 1
-Option_Save0_UserSelect: ds.b 1
-Option_Save1_UserSelect: ds.b 1
-Option_Save2_UserSelect: ds.b 1
-Option_Save3_UserSelect: ds.b 1
-Option_Save4_UserSelect: ds.b 1
-Option_Save5_UserSelect: ds.b 1
-Option_Save_DeleteSelect: ds.b 1
+Current_save_file: ds.w 1
+Option_Save0_UserSelect: ds.w 1
+Option_Save1_UserSelect: ds.w 1
+Option_Save2_UserSelect: ds.w 1
+Option_Save3_UserSelect: ds.w 1
+Option_Save4_UserSelect: ds.w 1
+Option_Save5_UserSelect: ds.w 1
+Option_Save_DeleteSelect: ds.w 1
 OptionsMenu_Saves_Mem: ds.w 1
 OptionsMenu_Save0_MenuType: ds.w 1
 OptionsMenu_Save0_MenuLabel: ds.l 1
@@ -1778,6 +1777,33 @@ OptionsMenu_Save5_ItemValue: ds.l 1
 OptionsMenu_Save5_ItemList: ds.l 1
 OptionsMenu_Save5_ItemIndex: ds.w 1
 Save_manager_end:
+DataFile_RAM_Start:
+DataFile_Save1_Zone: ds.b 1
+DataFile_Save1_Player: ds.b 1
+DataFile_Save1_Emeralds: ds.b 1
+DataFile_Save1_Lives: ds.b 1
+DataFile_Save1_Continues: ds.b 1
+DataFile_Save2_Zone: ds.b 1
+DataFile_Save2_Player: ds.b 1
+DataFile_Save2_Emeralds: ds.b 1
+DataFile_Save2_Lives: ds.b 1
+DataFile_Save2_Continues: ds.b 1
+DataFile_Save3_Zone: ds.b 1
+DataFile_Save3_Player: ds.b 1
+DataFile_Save3_Emeralds: ds.b 1
+DataFile_Save3_Lives: ds.b 1
+DataFile_Save3_Continues: ds.b 1
+DataFile_Save4_Zone: ds.b 1
+DataFile_Save4_Player: ds.b 1
+DataFile_Save4_Emeralds: ds.b 1
+DataFile_Save4_Lives: ds.b 1
+DataFile_Save4_Continues: ds.b 1
+DataFile_Save5_Zone: ds.b 1
+DataFile_Save5_Player: ds.b 1
+DataFile_Save5_Emeralds: ds.b 1
+DataFile_Save5_Lives: ds.b 1
+DataFile_Save5_Continues: ds.b 1
+DataFile_RAM_End:
 	dephase
 
 	!org	0	; Reset the program counter

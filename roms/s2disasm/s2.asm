@@ -385,6 +385,8 @@ InitSRAM:
 	cmp.l   d0,d1            ; Was it already in SRAM?
 	beq.s   LoadSRAM           ; If so, skip
 	movep.l d1,(a0)        ; Write string "SRAM"
+	move.b	#1,(DataFile_Save1_Zone).l
+	move.b	#3,(DataFile_Save1_Player).l
 	jsr		SaveSRAM
 	
 	; Init defaults here... although ideally they should be all 0
@@ -400,9 +402,18 @@ LoadSRAM:
 
 LoadSRAM_Loop:
 	cmpi.l	#Options_RAM_End,a6
-	beq.s	LoadSRAM_End
+	beq.s	LoadExSRAM
 	move.b	(a5)+,(a6)+
 	bra.s	LoadSRAM_Loop
+	
+LoadExSRAM:
+	lea	(DataFile_RAM_Start).l,a6
+
+LoadExSRAM_Loop:
+	cmpi.l	#DataFile_RAM_End,a6
+	beq.s	LoadSRAM_End
+	move.b	(a5)+,(a6)+
+	bra.s	LoadExSRAM_Loop
 
 LoadSRAM_End:
 	move.b  #0,(SRAM_Write).l    ; Disable SRAM writing
@@ -416,13 +427,34 @@ SaveSRAM:
 
 SaveSRAM_Loop:
 	cmpi.l	#Options_RAM_End,a6
-	beq.s	SaveSRAM_End
+	beq.s	SaveExSRAM
 	move.b	(a6)+,(a5)+
 	bra.s	SaveSRAM_Loop
+	
+SaveExSRAM:
+	lea	(DataFile_RAM_Start).l,a6
+
+SaveExSRAM_Loop:
+	cmpi.l	#DataFile_RAM_End,a6
+	beq.s	SaveSRAM_End
+	move.b	(a6)+,(a5)+
+	bra.s	SaveExSRAM_Loop
 
 SaveSRAM_End:
 	move.b  #0,(SRAM_Write).l    ; Disable SRAM writing
 	rts
+	
+; ===========================================================================
+
+WriteDataFile:
+	rts
+	
+DataFile_Headers:
+	dc.l DataFile_Save1_Zone
+	dc.l DataFile_Save2_Zone
+	dc.l DataFile_Save3_Zone
+	dc.l DataFile_Save4_Zone
+	dc.l DataFile_Save5_Zone
 
 ; ===========================================================================
 

@@ -242,14 +242,29 @@ OptionsScreen_Input_MenuItemDeleteSave:
 	beq.l	OptionsScreen_Input_MenuItemValue
 	cmpa.l	#OptionsMenu_DeleteFile,a0
 	bne.s	OptionsScreen_Input_MenuItemDeleteSave_Confirm
-	move.b	(Option_Save_DeleteSelect).l,(Current_save_file).l
+	cmp.b	#0,(Option_Save_DeleteSelect).l
+	beq.s	OptionsScreen_Input_MenuItemDeleteSave_Skip
+	move.w	(Option_Save_DeleteSelect).l,(Current_save_file).l
 	move.l	#OptionsMenu_DeleteFileConf,(OptionsMenu_DeleteFile_MenuOption).l
-	move.b	#0,(Option_Save_DeleteSelect).l
+	move.w	#0,(Option_Save_DeleteSelect).l
+	
+OptionsScreen_Input_MenuItemDeleteSave_Skip:
 	rts
 	
 OptionsScreen_Input_MenuItemDeleteSave_Confirm:
+	clr.l	d0
+	cmp.w	#0, (Option_Save_DeleteSelect).l
+	beq.s	OptionsScreen_Input_MenuItemDeleteSave_Cancel
+	move.w	(Current_save_file).l,d0
+	lsl.w	#2, d0
+	move.l	#DataFile_Headers, a0
+	move.l	(a0, d0.l),a0
+	move.b	#0,(a0)
+	
+OptionsScreen_Input_MenuItemDeleteSave_Cancel:
 	move.l	#OptionsMenu_DeleteFile,(OptionsMenu_DeleteFile_MenuOption).l
-	move.b	#0,(Option_Save_DeleteSelect).l
+	move.w	#0,(Option_Save_DeleteSelect).l
+	bsr.w	MenuScreen_DataSelect_LoadItems
 	rts
 	
 OptionsScreen_Input_MenuItemNewSave:
@@ -258,15 +273,17 @@ OptionsScreen_Input_MenuItemNewSave:
 	btst	#button_start,d0
 	beq.l	OptionsScreen_Input_MenuItemValue
 	; Set save index
-	move.b	$A(a0),(Current_save_file).l
+	clr.w	d0
+	move.b	$A(a0),d0
+	move.w	d0,(Current_save_file).l
 	; Set player
 	move.l	$2(a0),a1
-	move.w	(a1),(Player_option).l
+	move.b	(a1),(Player_option).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
 	
-	cmp.b	#0,(Current_save_file).l	; is saving disabled?
+	cmp.w	#0,(Current_save_file).l	; is saving disabled?
 	bne.s	+			; if not, branch
 	btst	#button_A,(Ctrl_1_Held).w ; is A held down?
 	beq.s	+	 		; if not, branch
@@ -284,7 +301,7 @@ OptionsScreen_Input_MenuItemValuePlayer:
 	btst	#button_start,d0
 	beq.s	OptionsScreen_Input_MenuItemValue
 	; No save file
-	move.b	#0,(Current_save_file).l
+	move.w	#0,(Current_save_file).l
 	; Start a single player game
 	move.w	#0,(Two_player_mode).w
 	move.w	#0,(Two_player_mode_copy).w
@@ -418,27 +435,110 @@ OptionsScreen_Input_MenuItemCredits:
 
 ; ===========================================================================
 
-MenuScreen_DataSelect:
-	move.l	#OptionsMenu_Saves_Mem,(Options_menu_pointer).l
-	move.b	#GameModeID_OptionsMenu,(Game_Mode).w ; => OptionsMenu
+MenuScreen_DataSelect_LoadItems:
 	move.w	#6, (OptionsMenu_Saves_Mem).l
 	
 	move.w	#MenuItemNewSave, (OptionsMenu_Save0_MenuType).l
 	move.l	#Txt_NoSave, (OptionsMenu_Save0_MenuLabel).l
 	move.l	#OptionsMenu_Save_0, (OptionsMenu_Save0_MenuOption).l
 	
+MenuScreen_DataSelect_Save1Init:
+	move.l	#OptionsMenu_Save1_ItemCount, (OptionsMenu_Save1_MenuOption).l
+	cmpi.b	#0, (DataFile_Save1_Zone).l
+	bne.s	MenuScreen_DataSelect_Save1Valid
 	move.w	#MenuItemNewSave, (OptionsMenu_Save1_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save1_MenuLabel).l
-	move.l	#OptionsMenu_Save1_ItemCount, (OptionsMenu_Save1_MenuOption).l
+	move.w	#4, (OptionsMenu_Save1_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save1_ItemList).l
+	bra.s	MenuScreen_DataSelect_Save2Init
 	
+MenuScreen_DataSelect_Save1Valid:
+	move.w	#MenuItemSave, (OptionsMenu_Save1_MenuType).l
+	move.l	#TxtList_CharacterUE, a0
+	clr.l	d0
+	move.b	(DataFile_Save1_Player).l, d0
+	lsl.l	#2, d0
+	move.l	(a0, d0), (OptionsMenu_Save1_MenuLabel).l
+	move.l	#TxtList_SaveZones, a0
+	move.b	(DataFile_Save1_Zone).l, d0
+	subi.b	#1, d0
+	lsl.l	#2, d0
+	cmp.l	#Txt_Clear,(a0, d0)
+	beq.s	MenuScreen_DataSelect_Save1Clear
+	adda.l	d0, a0
+	move.l	a0, (OptionsMenu_Save1_ItemList).l
+	move.w	#0, (OptionsMenu_Save1_ItemCount).l
+	bra.s	MenuScreen_DataSelect_Save2Init
+	
+MenuScreen_DataSelect_Save1Clear:
+	move.l	#TxtList_SaveZones, (OptionsMenu_Save1_ItemList).l
+	move.w	#11, (OptionsMenu_Save1_ItemCount).l
+	
+MenuScreen_DataSelect_Save2Init:
+	move.l	#OptionsMenu_Save2_ItemCount, (OptionsMenu_Save2_MenuOption).l
+	cmpi.b	#0, (DataFile_Save2_Zone).l
+	bne.s	MenuScreen_DataSelect_Save2Valid
 	move.w	#MenuItemNewSave, (OptionsMenu_Save2_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save2_MenuLabel).l
-	move.l	#OptionsMenu_Save2_ItemCount, (OptionsMenu_Save2_MenuOption).l
+	move.w	#4, (OptionsMenu_Save2_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save2_ItemList).l
+	bra.s	MenuScreen_DataSelect_Save3Init
 	
+MenuScreen_DataSelect_Save2Valid:
+	move.w	#MenuItemSave, (OptionsMenu_Save2_MenuType).l
+	move.l	#TxtList_CharacterUE, a0
+	clr.l	d0
+	move.b	(DataFile_Save2_Player).l, d0
+	lsl.l	#2, d0
+	move.l	(a0, d0), (OptionsMenu_Save2_MenuLabel).l
+	move.l	#TxtList_SaveZones, a0
+	move.b	(DataFile_Save2_Zone).l, d0
+	subi.b	#1, d0
+	lsl.l	#2, d0
+	cmp.l	#Txt_Clear,(a0, d0)
+	beq.s	MenuScreen_DataSelect_Save2Clear
+	adda.l	d0, a0
+	move.l	a0, (OptionsMenu_Save2_ItemList).l
+	move.w	#0, (OptionsMenu_Save2_ItemCount).l
+	bra.s	MenuScreen_DataSelect_Save3Init
+	
+MenuScreen_DataSelect_Save2Clear:
+	move.l	#TxtList_SaveZones, (OptionsMenu_Save2_ItemList).l
+	move.w	#11, (OptionsMenu_Save2_ItemCount).l
+
+MenuScreen_DataSelect_Save3Init:	
+	move.l	#OptionsMenu_Save3_ItemCount, (OptionsMenu_Save3_MenuOption).l
+	cmpi.b	#0, (DataFile_Save3_Zone).l
+	bne.s	MenuScreen_DataSelect_Save3Valid
 	move.w	#MenuItemNewSave, (OptionsMenu_Save3_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save3_MenuLabel).l
-	move.l	#OptionsMenu_Save3_ItemCount, (OptionsMenu_Save3_MenuOption).l
+	move.w	#4, (OptionsMenu_Save3_ItemCount).l
+	move.l	#TxtList_CharacterUE, (OptionsMenu_Save3_ItemList).l
+	bra.s	MenuScreen_DataSelect_Save4Init
 	
+MenuScreen_DataSelect_Save3Valid:
+	move.w	#MenuItemSave, (OptionsMenu_Save3_MenuType).l
+	move.l	#TxtList_CharacterUE, a0
+	clr.l	d0
+	move.b	(DataFile_Save3_Player).l, d0
+	lsl.l	#2, d0
+	move.l	(a0, d0), (OptionsMenu_Save3_MenuLabel).l
+	move.l	#TxtList_SaveZones, a0
+	move.b	(DataFile_Save3_Zone).l, d0
+	subi.b	#1, d0
+	lsl.l	#2, d0
+	cmp.l	#Txt_Clear,(a0, d0)
+	beq.s	MenuScreen_DataSelect_Save3Clear
+	adda.l	d0, a0
+	move.l	a0, (OptionsMenu_Save3_ItemList).l
+	move.w	#0, (OptionsMenu_Save3_ItemCount).l
+	bra.s	MenuScreen_DataSelect_Save4Init
+	
+MenuScreen_DataSelect_Save3Clear:
+	move.l	#TxtList_SaveZones, (OptionsMenu_Save3_ItemList).l
+	move.w	#11, (OptionsMenu_Save3_ItemCount).l
+
+MenuScreen_DataSelect_Save4Init:
 	move.w	#MenuItemNewSave, (OptionsMenu_Save4_MenuType).l
 	move.l	#Txt_NewFile, (OptionsMenu_Save4_MenuLabel).l
 	move.l	#OptionsMenu_Save4_ItemCount, (OptionsMenu_Save4_MenuOption).l
@@ -461,16 +561,16 @@ MenuScreen_DataSelect:
 	move.l	#Option_Save3_UserSelect, (OptionsMenu_Save3_ItemValue).l
 	move.l	#Option_Save4_UserSelect, (OptionsMenu_Save4_ItemValue).l
 	move.l	#Option_Save5_UserSelect, (OptionsMenu_Save5_ItemValue).l
-	move.w	#4, (OptionsMenu_Save1_ItemCount).l
-	move.l	#TxtList_CharacterUE, (OptionsMenu_Save1_ItemList).l
-	move.w	#4, (OptionsMenu_Save2_ItemCount).l
-	move.l	#TxtList_CharacterUE, (OptionsMenu_Save2_ItemList).l
-	move.w	#4, (OptionsMenu_Save3_ItemCount).l
-	move.l	#TxtList_CharacterUE, (OptionsMenu_Save3_ItemList).l
 	move.w	#4, (OptionsMenu_Save4_ItemCount).l
 	move.l	#TxtList_CharacterUE, (OptionsMenu_Save4_ItemList).l
 	move.w	#4, (OptionsMenu_Save5_ItemCount).l
 	move.l	#TxtList_CharacterUE, (OptionsMenu_Save5_ItemList).l
+	rts
+
+MenuScreen_DataSelect:
+	move.l	#OptionsMenu_Saves_Mem,(Options_menu_pointer).l
+	move.b	#GameModeID_OptionsMenu,(Game_Mode).w ; => OptionsMenu
+	bsr.w	MenuScreen_DataSelect_LoadItems
 	bra.s MenuScreen_Init
 
 ; loc_8FCC:
