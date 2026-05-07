@@ -242,9 +242,14 @@ OptionsScreen_Input_MenuItemDeleteSave:
 	beq.l	OptionsScreen_Input_MenuItemValue
 	cmpa.l	#OptionsMenu_DeleteFile,a0
 	bne.s	OptionsScreen_Input_MenuItemDeleteSave_Confirm
+	move.b	(Option_Save_DeleteSelect).l,(Current_save_file).l
+	move.l	(OptionsMenu_DeleteFile_MenuOption).l,#OptionsMenu_DeleteFileConf
+	move.b	#0,(Option_Save_DeleteSelect).l
 	rts
 	
 OptionsScreen_Input_MenuItemDeleteSave_Confirm:
+	move.l	(OptionsMenu_DeleteFile_MenuOption).l,#OptionsMenu_DeleteFile
+	move.b	#0,(Option_Save_DeleteSelect).l
 	rts
 	
 OptionsScreen_Input_MenuItemNewSave:
