@@ -385,16 +385,6 @@ InitSRAM:
 	cmp.l   d0,d1            ; Was it already in SRAM?
 	beq.s   LoadSRAM           ; If so, skip
 	movep.l d1,(a0)        ; Write string "SRAM"
-	move.b	#3,(DataFile_Save1_Zone).l
-	move.b	#3,(DataFile_Save1_Player).l
-	move.b	#2,(DataFile_Save2_Zone).l
-	move.b	#2,(DataFile_Save2_Player).l
-	move.b	#5,(DataFile_Save3_Zone).l
-	move.b	#0,(DataFile_Save3_Player).l
-	move.b	#12,(DataFile_Save4_Zone).l
-	move.b	#1,(DataFile_Save4_Player).l
-	move.b	#2,(DataFile_Save5_Zone).l
-	move.b	#1,(DataFile_Save5_Player).l
 	jsr		SaveSRAM
 	
 	; Init defaults here... although ideally they should be all 0
@@ -455,6 +445,52 @@ SaveSRAM_End:
 ; ===========================================================================
 
 WriteDataFile:
+	cmpi.b	#0,(Current_save_file).l
+	beq.s	WriteDataFile_Abort
+	move.l	#DataFile_Zones_End,a0
+
+WriteDataFile_ZoneLoop:
+	cmpa.l	#DataFile_Zones,a0
+	beq.s	WriteDataFile_Abort
+	cmpi.w	-(a0), (Current_ZoneAndAct)
+	bne.s	WriteDataFile_ZoneLoop
+	
+WriteDataFile_Store:
+	move.l	a0,d0
+	subi.l	#DataFile_Zones,d0
+	addi.l	#1,d0
+	move.l	#DataFile_Headers, a0
+	move.l	(a0, d0.w),a0
+	move.b	d0,(a0)+
+	move.b	(Player_option),(a0)+
+	
+	clr.b	d0
+	cmp.b	#0,Got_emerald_array
+	beq.s	+
+	ori.b	#1,d0
++	cmp.b	#0,Got_emerald_array+1
+	beq.s	+
+	ori.b	#2,d0
++	cmp.b	#0,Got_emerald_array+2
+	beq.s	+
+	ori.b	#4,d0
++	cmp.b	#0,Got_emerald_array+3
+	beq.s	+
+	ori.b	#8,d0
++	cmp.b	#0,Got_emerald_array+4
+	beq.s	+
+	ori.b	#16,d0
++	cmp.b	#0,Got_emerald_array+5
+	beq.s	+
+	ori.b	#32,d0
++	cmp.b	#0,Got_emerald_array+6
+	beq.s	+
+	ori.b	#64,d0
++	move.b	d0,(a0)+
+	move.b	(Life_count), (a0)+
+	move.b	(Continue_count), (a0)+
+
+WriteDataFile_Abort:
 	rts
 	
 DataFile_Headers:
@@ -476,6 +512,7 @@ DataFile_Zones:
 	dc.w	sky_chase_zone_act_1
 	dc.w	wing_fortress_zone_act_1
 	dc.w	death_egg_zone_act_1
+DataFile_Zones_End:
 
 ; ===========================================================================
 

@@ -1759,23 +1759,18 @@ OptionsMenu_DeleteFile_MenuOption: ds.l 1
 OptionsMenu_Save1_ItemCount: ds.w 1
 OptionsMenu_Save1_ItemValue: ds.l 1
 OptionsMenu_Save1_ItemList: ds.l 1
-OptionsMenu_Save1_ItemIndex: ds.w 1
 OptionsMenu_Save2_ItemCount: ds.w 1
 OptionsMenu_Save2_ItemValue: ds.l 1
 OptionsMenu_Save2_ItemList: ds.l 1
-OptionsMenu_Save2_ItemIndex: ds.w 1
 OptionsMenu_Save3_ItemCount: ds.w 1
 OptionsMenu_Save3_ItemValue: ds.l 1
 OptionsMenu_Save3_ItemList: ds.l 1
-OptionsMenu_Save3_ItemIndex: ds.w 1
 OptionsMenu_Save4_ItemCount: ds.w 1
 OptionsMenu_Save4_ItemValue: ds.l 1
 OptionsMenu_Save4_ItemList: ds.l 1
-OptionsMenu_Save4_ItemIndex: ds.w 1
 OptionsMenu_Save5_ItemCount: ds.w 1
 OptionsMenu_Save5_ItemValue: ds.l 1
 OptionsMenu_Save5_ItemList: ds.l 1
-OptionsMenu_Save5_ItemIndex: ds.w 1
 Save_manager_end:
 DataFile_RAM_Start:
 DataFile_Save1_Zone: ds.b 1
