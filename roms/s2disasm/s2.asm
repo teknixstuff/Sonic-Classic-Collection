@@ -460,8 +460,11 @@ WriteDataFile_Store:
 	move.l	a0,d0
 	subi.l	#DataFile_Zones,d0
 	addi.l	#1,d0
+	clr.w	d1
+	move.b	(Current_save_file).l,d1
+	lsl.l	#2,d1
 	move.l	#DataFile_Headers, a0
-	move.l	(a0, d0.w),a0
+	move.l	(a0, d1.w),a0
 	move.b	d0,(a0)+
 	move.b	(Player_option).l,(a0)+
 	
@@ -4542,6 +4545,7 @@ Level_TtlCard:
 	bsr.w	WaitForVint
 	jsr	(RunObjects).l
 	jsr	(BuildSprites).l
+	jsr WriteDataFile
 	bsr.w	RunPLC_RAM
 	tst.b	(Level_Quick_Reset_flag).w
 	bne.w	+

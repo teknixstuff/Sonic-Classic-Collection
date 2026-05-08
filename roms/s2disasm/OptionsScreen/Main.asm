@@ -319,8 +319,7 @@ OptionsScreen_Input_MenuItemNewSave:
 	move.l	a0,d0
 	subi.l	#OptionsMenu_Save1_ItemCount,d0
 	divu.w	#10,d0
-	;addi.w	#1,d0
-	move.w	d0,(Current_save_file).l
+	move.b	d0,(Current_save_file).l
 	; Set player
 	move.l	$2(a0),a1
 	move.b	(a1),(Player_option).l
