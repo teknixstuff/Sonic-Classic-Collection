@@ -446,13 +446,14 @@ SaveSRAM_End:
 
 WriteDataFile:
 	cmpi.b	#0,(Current_save_file).l
-	beq.s	WriteDataFile_Abort
+	beq.w	WriteDataFile_Abort
 	move.l	#DataFile_Zones_End,a0
 
 WriteDataFile_ZoneLoop:
 	cmpa.l	#DataFile_Zones,a0
-	beq.s	WriteDataFile_Abort
-	cmpi.w	-(a0), (Current_ZoneAndAct)
+	beq.w	WriteDataFile_Abort
+	move.w	-(a0), d1
+	cmp.w	(Current_ZoneAndAct).l,d1
 	bne.s	WriteDataFile_ZoneLoop
 	
 WriteDataFile_Store:
@@ -462,33 +463,33 @@ WriteDataFile_Store:
 	move.l	#DataFile_Headers, a0
 	move.l	(a0, d0.w),a0
 	move.b	d0,(a0)+
-	move.b	(Player_option),(a0)+
+	move.b	(Player_option).l,(a0)+
 	
 	clr.b	d0
-	cmp.b	#0,Got_emerald_array
+	cmpi.b	#0,Got_Emeralds_array
 	beq.s	+
 	ori.b	#1,d0
-+	cmp.b	#0,Got_emerald_array+1
++	cmpi.b	#0,Got_Emeralds_array+1
 	beq.s	+
 	ori.b	#2,d0
-+	cmp.b	#0,Got_emerald_array+2
++	cmpi.b	#0,Got_Emeralds_array+2
 	beq.s	+
 	ori.b	#4,d0
-+	cmp.b	#0,Got_emerald_array+3
++	cmpi.b	#0,Got_Emeralds_array+3
 	beq.s	+
 	ori.b	#8,d0
-+	cmp.b	#0,Got_emerald_array+4
++	cmpi.b	#0,Got_Emeralds_array+4
 	beq.s	+
 	ori.b	#16,d0
-+	cmp.b	#0,Got_emerald_array+5
++	cmpi.b	#0,Got_Emeralds_array+5
 	beq.s	+
 	ori.b	#32,d0
-+	cmp.b	#0,Got_emerald_array+6
++	cmpi.b	#0,Got_Emeralds_array+6
 	beq.s	+
 	ori.b	#64,d0
 +	move.b	d0,(a0)+
-	move.b	(Life_count), (a0)+
-	move.b	(Continue_count), (a0)+
+	move.b	(Life_count).l,(a0)+
+	move.b	(Continue_count).l,(a0)+
 
 WriteDataFile_Abort:
 	rts
