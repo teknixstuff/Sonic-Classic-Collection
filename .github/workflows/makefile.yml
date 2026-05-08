@@ -39,5 +39,5 @@ jobs:
         artifacts: "genesis_plus_gx_wide_sdl.exe"
         commit: "${{ github.sha }}"
         prerelease: true
-        tag: "actions-${{ github.sha }}"
-        name: "Continuous Integration Build (${{ github.sha }})"
+        tag: "actions-${{ github.run_id }}"
+        name: "Continuous Integration Build #${{ github.run_id }}"
