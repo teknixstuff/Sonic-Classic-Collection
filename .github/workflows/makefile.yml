@@ -33,3 +33,11 @@ jobs:
         path: genesis_plus_gx_wide_sdl.exe
         archive: false
         
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "genesis_plus_gx_wide_sdl.exe"
+        commit: "${{ github.sha }}"
+        prerelease: true
+        tag: "actions-${{ github.sha }}"
+        name: "Continuous Integration Build (${{ github.sha }})"
