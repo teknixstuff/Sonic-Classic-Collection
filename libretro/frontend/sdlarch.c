@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <pthread.h>
 #include "libretro.h"
 #include "glad.h"
 
@@ -1111,13 +1112,14 @@ int main(int argc, char *argv[]) {
 
     while (running) {
         // Update the game loop timer.
-        if (runloop_frame_time.callback) {
-            retro_time_t current = cpu_features_get_time_usec();
-            retro_time_t delta = current - runloop_frame_time_last;
+		retro_time_t current = cpu_features_get_time_usec();
+		retro_time_t delta = current - runloop_frame_time_last;
 
-            if (!runloop_frame_time_last)
-                delta = runloop_frame_time.reference;
-            runloop_frame_time_last = current;
+		if (!runloop_frame_time_last)
+			delta = runloop_frame_time.reference;
+		runloop_frame_time_last = current;
+		
+        if (runloop_frame_time.callback) {
             runloop_frame_time.callback(delta);
         }
 
@@ -1140,6 +1142,10 @@ int main(int argc, char *argv[]) {
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		struct timespec req;
+		req.tv_nsec = (1000000 / 60) - delta;
+		req.tv_sec = 0;
+		nanosleep(&req, NULL);
         retro_run();
     }
 
