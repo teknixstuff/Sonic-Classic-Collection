@@ -459,6 +459,7 @@ WriteDataFile_ZoneLoop:
 WriteDataFile_Store:
 	move.l	a0,d0
 	subi.l	#DataFile_Zones,d0
+	lsr.l	#1,d0
 	addi.l	#1,d0
 	clr.w	d1
 	move.b	(Current_save_file).l,d1
