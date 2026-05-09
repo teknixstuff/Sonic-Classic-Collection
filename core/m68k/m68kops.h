@@ -139,7 +139,9 @@ INLINE void UseMulsCycles(sint16 src)
 
 static void m68k_op_1010(void)
 {
-  m68ki_exception_1010();
+  if (!CALLBACK_LINE_1010()) {
+    m68ki_exception_1010();
+  }
 }
 
 

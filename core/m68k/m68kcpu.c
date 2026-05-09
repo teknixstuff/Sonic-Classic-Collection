@@ -71,6 +71,11 @@ static void default_set_fc_callback(unsigned int new_fc)
 }
 #endif
 
+/* Line 1010 coprocessor */
+static int default_line_1010_callback(void)
+{
+  return 0; // not handled, throw exception
+}
 
 /* ======================================================================== */
 /* ================================= API ================================== */
@@ -187,6 +192,11 @@ void m68k_set_fc_callback(void  (*callback)(unsigned int new_fc))
   CALLBACK_SET_FC = callback ? callback : default_set_fc_callback;
 }
 #endif
+
+void m68k_set_line_1010_callback(int (*callback)(void))
+{
+  CALLBACK_LINE_1010 = callback ? callback : default_line_1010_callback;
+}
 
 #ifdef LOGERROR
 

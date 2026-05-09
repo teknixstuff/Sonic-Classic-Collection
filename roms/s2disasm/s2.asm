@@ -439,7 +439,9 @@ SaveExSRAM_Loop:
 	bra.s	SaveExSRAM_Loop
 
 SaveSRAM_End:
-	move.b  #0,(SRAM_Write).l    ; Disable SRAM writing
+	move.b  #0,(SRAM_Write).l	; Disable SRAM writing
+	move.w #48, -(a7)			; SRAM size is 48 bytes
+	dc.w $A001					; request sram write
 	rts
 	
 ; ===========================================================================
@@ -466,6 +468,8 @@ WriteDataFile_Store:
 	lsl.l	#2,d1
 	move.l	#DataFile_Headers, a0
 	move.l	(a0, d1.w),a0
+	cmp.b	d0,(a0)
+	bls.w	WriteDataFile_Abort
 	move.b	d0,(a0)+
 	move.b	(Player_option).l,(a0)+
 	
@@ -494,6 +498,7 @@ WriteDataFile_Store:
 +	move.b	d0,(a0)+
 	move.b	(Life_count).l,(a0)+
 	move.b	(Continue_count).l,(a0)+
+	bra.w	SaveSRAM
 
 WriteDataFile_Abort:
 	rts

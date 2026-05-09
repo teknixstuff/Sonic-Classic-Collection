@@ -239,7 +239,7 @@
 #if M68K_EMULATE_FC == OPT_ON
 #define CALLBACK_SET_FC       m68ki_cpu.set_fc_callback
 #endif
-
+#define CALLBACK_LINE_1010       m68ki_cpu.line_1010_callback
 
 /* ----------------------------- Configuration ---------------------------- */
 

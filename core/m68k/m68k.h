@@ -283,6 +283,7 @@ typedef struct
   void (*reset_instr_callback)(void);               /* Called when a RESET instruction is encountered */
   int  (*tas_instr_callback)(void);                 /* Called when a TAS instruction is encountered, allows / disallows writeback */
   void (*set_fc_callback)(unsigned int new_fc);     /* Called when the CPU function code changes */
+  int  (*line_1010_callback)(void);                 /* Called when an A-line instruction is encountered */
 } m68ki_cpu_core;
 
 /* CPU cores */
@@ -345,6 +346,10 @@ void m68k_set_tas_instr_callback(int  (*callback)(void));
 void m68k_set_fc_callback(void  (*callback)(unsigned int new_fc));
 #endif
 
+/* Set the callback for A-line instructions
+ * Default behavior: return 0, throw exception.
+ */
+void m68k_set_line_1010_callback(int (*callback)(void));
 
 /* ======================================================================== */
 /* ====================== FUNCTIONS TO ACCESS THE CPU ===================== */
