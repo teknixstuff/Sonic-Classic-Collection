@@ -359,6 +359,7 @@ void m68k_init(void)
 #if M68K_EMULATE_FC == OPT_ON
   m68k_set_fc_callback(NULL);
 #endif
+  m68k_set_line_1010_callback(NULL);
 }
 
 /* Pulse the RESET line on the CPU */

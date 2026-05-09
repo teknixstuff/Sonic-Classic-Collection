@@ -1143,7 +1143,7 @@ int main(int argc, char *argv[]) {
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		struct timespec req;
-		req.tv_nsec = (1000000 / 60) - delta;
+		req.tv_nsec = (1000000000 / 60) - delta;
 		req.tv_sec = 0;
 		nanosleep(&req, NULL);
         retro_run();

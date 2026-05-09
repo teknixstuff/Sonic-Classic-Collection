@@ -468,7 +468,7 @@ WriteDataFile_Store:
 	lsl.l	#2,d1
 	move.l	#DataFile_Headers, a0
 	move.l	(a0, d1.w),a0
-	cmp.b	d0,(a0)
+	cmp.b	(a0),d0
 	bls.w	WriteDataFile_Abort
 	move.b	d0,(a0)+
 	move.b	(Player_option).l,(a0)+
