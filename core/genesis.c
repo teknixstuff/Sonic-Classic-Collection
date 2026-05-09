@@ -74,6 +74,7 @@ void gen_init(void)
     /* initialize main 68k */
     m68k_init();
     m68k.aerr_enabled = config.addr_error; 
+    m68k_set_line_1010_callback(emucall_handler);
 
     /* initialize main 68k memory map */
 
@@ -583,4 +584,18 @@ void gen_zbank_w (unsigned int data)
 int z80_irq_callback (int param)
 {
   return -1;
+}
+
+/*-----------------------------------------------------------------------*/
+/* A-line instruction ("emucall") callback                               */
+/* ----------------------------------------------------------------------*/
+
+int emucall_handler(void)
+{
+  if (m68k.ir == 0xA001) {
+    // save SRAM. Stack value is SRAM size, in bytes.
+    m68k_set_reg(M68K_REG_SP, m68k_get_reg(M68K_REG_SP) + 2);
+    return 1;
+  }
+  return 0;
 }

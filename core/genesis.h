@@ -77,6 +77,7 @@ extern void gen_zbusreq_w(unsigned int state, unsigned int cycles);
 extern void gen_zreset_w(unsigned int state, unsigned int cycles);
 extern void gen_zbank_w(unsigned int state);
 extern int z80_irq_callback(int param);
+int emucall_handler(void);
 
 #endif /* _GEN_H_ */
 
