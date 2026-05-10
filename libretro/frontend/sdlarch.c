@@ -969,6 +969,13 @@ static void core_load_game(const char *filename) {
     if (info.data)
         SDL_free((void*)info.data);
 
+    void* sram = retro_get_memory_data(RETRO_MEMORY_SAVE_RAM);
+    HKEY hKeySonic;
+    if (!RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Sonic Classic Collection", 0, NULL, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, NULL, &hKeySonic, NULL)) {
+        RegQueryValueEx(hKeySonic, rom_path, NULL, NULL, sram, 0x2000);
+        RegCloseKey(hKeySonic);
+    }
+
     SDL_SetWindowTitle(g_win, "Sonic Classic Collection");
 }
 
