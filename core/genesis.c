@@ -592,9 +592,8 @@ int z80_irq_callback (int param)
 
 int emucall_handler(void)
 {
-  if (m68k.ir == 0xA001) {
-    // save SRAM. Stack value is SRAM size, in bytes.
-    m68k_set_reg(M68K_REG_SP, m68k_get_reg(M68K_REG_SP) + 2);
+  if (m68k.ir == 0xA001) { // save SRAM
+    gen_write_sram();
     return 1;
   }
   return 0;

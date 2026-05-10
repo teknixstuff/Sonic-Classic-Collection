@@ -79,5 +79,8 @@ extern void gen_zbank_w(unsigned int state);
 extern int z80_irq_callback(int param);
 int emucall_handler(void);
 
+/* Frontend callbacks */
+extern void gen_write_sram(void);
+
 #endif /* _GEN_H_ */
 

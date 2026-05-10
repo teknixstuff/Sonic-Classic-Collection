@@ -72,6 +72,8 @@
 #define RETRO_DEVICE_JUSTIFIERS           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_LIGHTGUN, 2)
 #define RETRO_DEVICE_GRAPHIC_BOARD        RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 0)
 
+#define RETRO_ENVIRONMENT_CUSTOM_WRITE_SRAM 1001 // Tells the frontend that the core is asking for save RAM to be written out
+
 #include <libretro.h>
 #include <streams/file_stream.h>
 #include <file/file_path.h>
@@ -3842,6 +3844,11 @@ static void check_system_specs(void)
 {
    unsigned level = 7;
    environ_cb(RETRO_ENVIRONMENT_SET_PERFORMANCE_LEVEL, &level);
+}
+
+void gen_write_sram(void)
+{
+   environ_cb(RETRO_ENVIRONMENT_CUSTOM_WRITE_SRAM, NULL);
 }
 
 void retro_init(void)

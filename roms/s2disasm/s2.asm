@@ -440,8 +440,7 @@ SaveExSRAM_Loop:
 
 SaveSRAM_End:
 	move.b  #0,(SRAM_Write).l	; Disable SRAM writing
-	move.w #48, -(a7)			; SRAM size is 48 bytes
-	dc.w $A001					; request sram write
+	dc.w	$A001				; Request SRAM write to disk
 	rts
 	
 ; ===========================================================================

@@ -4,6 +4,8 @@
 #include "libretro.h"
 #include "glad.h"
 
+#define RETRO_ENVIRONMENT_CUSTOM_WRITE_SRAM 1001 // Tells the frontend that the core is asking for save RAM to be written out
+
 static SDL_Window *g_win = NULL;
 static SDL_GLContext *g_ctx = NULL;
 static SDL_AudioDeviceID g_pcm = 0;
@@ -13,6 +15,7 @@ static const uint8_t *g_kbd = NULL;
 static struct retro_audio_callback audio_callback;
 static bool g_gameInfoExtValid = false;
 static struct retro_game_info_ext g_gameInfoExt = { 0 };
+static const char* rom_path = NULL;
 
 static float g_scale = 3;
 bool running = true;
@@ -89,6 +92,7 @@ static const char *g_fshader_src =
 
 
 
+char* gameROMs[] = {"sonic1", "sonic2", "sonic3"};
 
 static struct {
     bool initialized;
@@ -815,6 +819,16 @@ static bool core_environment(unsigned cmd, void *data) {
         *(struct retro_game_info_ext**)data = &g_gameInfoExt;
         return true;
     }
+    case RETRO_ENVIRONMENT_CUSTOM_WRITE_SRAM: {
+        void* sram = retro_get_memory_data(RETRO_MEMORY_SAVE_RAM);
+        int sram_size = retro_get_memory_size(RETRO_MEMORY_SAVE_RAM);
+        HKEY hKeySonic;
+        if (!RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Sonic Classic Collection", 0, NULL, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, NULL, &hKeySonic, NULL)) {
+            RegSetValueEx(hKeySonic, rom_path, 0, REG_BINARY, sram, sram_size);
+            RegCloseKey(hKeySonic);
+        }
+        return true;
+    }
     default:
         core_log(RETRO_LOG_DEBUG, "Unhandled env #%u", cmd);
         return false;
@@ -881,6 +895,7 @@ static void core_load_game(const char *filename) {
     struct retro_system_av_info av = {0};
     struct retro_system_info system = {0};
     struct retro_game_info info = { filename, 0 };
+    rom_path = filename;
 
     g_gameInfoExtValid = false;
     info.path = filename;
@@ -1001,7 +1016,6 @@ static bool game_select() {
     SDL_Texture* sonic2 = load_image_resource(renderer, "sonic2");
     SDL_Texture* sonic3 = load_image_resource(renderer, "sonic3");
     SDL_Texture* games[] = {sonic1, sonic2, sonic3};
-    char* gameROMs[] = {"sonic1", "sonic2", "sonic3"};
 
     int selectedGame = 0;
     float transitionTime = 0;
