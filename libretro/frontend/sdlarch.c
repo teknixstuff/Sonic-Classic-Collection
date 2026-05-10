@@ -969,14 +969,6 @@ static void core_load_game(const char *filename) {
     if (info.data)
         SDL_free((void*)info.data);
 
-    void* sram = retro_get_memory_data(RETRO_MEMORY_SAVE_RAM);
-    HKEY hKeySonic;
-    if (!RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Sonic Classic Collection", 0, NULL, 0, KEY_SET_VALUE | KEY_WOW64_64KEY, NULL, &hKeySonic, NULL)) {
-        DWORD dwSaveSize = 0x2000;
-        RegQueryValueEx(hKeySonic, rom_path, NULL, NULL, sram, &dwSaveSize);
-        RegCloseKey(hKeySonic);
-    }
-
     SDL_SetWindowTitle(g_win, "Sonic Classic Collection");
 }
 
@@ -1067,8 +1059,6 @@ static bool game_select() {
         if (!runloop_frame_time_last) delta = 0;
         runloop_frame_time_last = current;
 
-        printf("%f %f\n", transitionTime, (delta/1000)/1000.0);
-        fflush(stdout);
         if (transitionTime > 0) transitionTime = fmax(0, transitionTime - ((delta/1000)/1000.0));
         if (transitionTime < 0) transitionTime = fmin(0, transitionTime + ((delta/1000)/1000.0));
 
@@ -1126,6 +1116,14 @@ int main(int argc, char *argv[]) {
         core_load_game(argv[1]);
     else if (!game_select())
         return 0;
+
+    void* sram = retro_get_memory_data(RETRO_MEMORY_SAVE_RAM);
+    HKEY hKeySonic;
+    if (!RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Sonic Classic Collection", 0, NULL, 0, KEY_QUERY_VALUE | KEY_WOW64_64KEY, NULL, &hKeySonic, NULL)) {
+        DWORD dwSaveSize = 0x2000;
+        RegQueryValueEx(hKeySonic, rom_path, NULL, NULL, sram, &dwSaveSize);
+        RegCloseKey(hKeySonic);
+    }
 
     // Configure the player input devices.
     retro_set_controller_port_device(0, RETRO_DEVICE_JOYPAD);
