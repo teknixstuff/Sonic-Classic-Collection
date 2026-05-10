@@ -15780,6 +15780,7 @@ loc_C3A2:
 		addq.w	#4,a1
 		dbf	d1,loc_C3A2
 		move.b	#0,(SRAM_access_flag).l	; Stop SRAM access
+		dc.w	$A001					; Request SRAM write to disk
 		tst.w	(SRAM_mask_interrupts_flag).w
 		beq.s	locret_C3C0
 		move	#$2300,sr		; Restore interrupts if EF56 was set
