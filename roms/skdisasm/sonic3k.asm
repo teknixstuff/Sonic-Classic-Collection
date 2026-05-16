@@ -9931,7 +9931,7 @@ LevelSelect_S2Options:
 		bsr.w	Eni_Decomp
 		lea	(RAM_start).l,a1
 		move.l	#vdpComm(VRAM_Plane_B_Name_Table,VRAM,WRITE),d0
-		moveq	#40-1,d1
+		moveq	#52-1,d1
 		moveq	#28-1,d2
 		jsr	(Plane_Map_To_VRAM).l
 
@@ -10039,8 +10039,8 @@ LevelSelect_S2Options:
 		clr.w	(Results_screen_2P).w
 		clr.b	(Level_started_flag).w
 		clr.w	(Anim_Counters).w
-		lea	(AniPLC_SONICMILES).l,a2
-		jsr	(AnimateTiles_DoAniPLC).l
+		;lea	(AniPLC_SONICMILES).l,a2
+		;jsr	(AnimateTiles_DoAniPLC).l
 		moveq	#4,d0
 		bsr.w	LoadPalette
 		lea	(Normal_palette_line_3).w,a1
@@ -10096,8 +10096,8 @@ LevelSelect_Main:	; routine running during level select
 		; In S3, there was a branch to some zone icon code here
 		;bsr.w	LevelSelect_DrawIcon
 		move	#$2300,sr
-		lea	(AniPLC_SONICMILES).l,a2
-		jsr	(AnimateTiles_DoAniPLC).l
+		;lea	(AniPLC_SONICMILES).l,a2
+		;jsr	(AnimateTiles_DoAniPLC).l
 		move.b	(Ctrl_1_pressed).w,d0
 		or.b	(Ctrl_2_pressed).w,d0
 		andi.b	#button_start_mask,d0
@@ -10592,17 +10592,17 @@ LevelSelectText:
 		levselstr "SPECIAL STAGE"
 		levselstr "SOUND TEST  *"
 		even
-AniPLC_SONICMILES: zoneanimstart
+;AniPLC_SONICMILES: zoneanimstart
 	; Sonic/Miles animated background
-	zoneanimdecl  -1, ArtUnc_SONICMILES, $001,  6, $A
-		dc.b    0, $C7
-		dc.b   $A,   5
-		dc.b  $14,   5
-		dc.b  $1E, $C7
-		dc.b  $14,   5
-		dc.b   $A,   5
-		even
-	zoneanimend
+	;zoneanimdecl  -1, ArtUnc_SONICMILES, $001,  6, $A
+	;	dc.b    0, $C7
+	;	dc.b   $A,   5
+	;	dc.b  $14,   5
+	;	dc.b  $1E, $C7
+	;	dc.b  $14,   5
+	;	dc.b   $A,   5
+	;	even
+	;zoneanimend
 ; ---------------------------------------------------------------------------
 
 SpecialStage:
@@ -200730,9 +200730,9 @@ Pal_DEZBoss:
 ArtUnc_AirCountdown:
 		binclude "General/Sprites/Bubbles/Air Countdown.bin"
 		even
-ArtUnc_SONICMILES:
-		binclude "General/S2Menu/Uncompressed Art/SONICMILES.bin"
-		even
+;ArtUnc_SONICMILES:
+;		binclude "General/S2Menu/Uncompressed Art/SONICMILES.bin"
+;		even
 ArtUnc_SStageSonic:
 		binclude "General/Sprites/Sonic/Art/SStage Sonic.bin"
 		even
