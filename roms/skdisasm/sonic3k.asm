@@ -5651,8 +5651,15 @@ loc_41D4:
 
 loc_4264:
 		subq.b	#1,d0
-		bne.s	loc_4270
+		bne.s	loc_4268
 		move.b	#$38,(Game_mode).w		; Game Mode 38 is Competition mode
+		rts
+		; ---------------------------------------------------------------------------
+
+loc_4268:
+		subq.b	#1,d0
+		bne.s	loc_4270
+		move.b	#$4C,(Game_mode).w		; Game Mode 4C is the save select
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -6152,7 +6159,7 @@ Obj_TitleCopyright:
 		move.w	#$80,priority(a0)
 		move.b	#$C,width_pixels(a0)
 		move.b	#4,height_pixels(a0)
-		move.b	#3,mapping_frame(a0)
+		move.b	#4,mapping_frame(a0)
 		move.l	#Obj_TitleCopyright_Display,(a0)
 
 Obj_TitleCopyright_Display:
@@ -6177,10 +6184,10 @@ Obj_TitleSelection_Main:
 		beq.s	loc_4AAE
 		subq.b	#1,d2
 		bcc.s	loc_4AAE
-		move.b	#2,d2
-		tst.b	(Level_select_flag).w		; If level select is on, maximum choices are 3
+		move.b	#3,d2
+		tst.b	(Level_select_flag).w		; If level select is on, maximum choices are 4
 		bne.s	loc_4AAE
-		move.b	#1,d2
+		move.b	#2,d2
 
 loc_4AAE:
 		btst	#button_down,d0
@@ -6188,13 +6195,12 @@ loc_4AAE:
 		addq.b	#1,d2
 		tst.b	(Level_select_flag).w		; See above
 		bne.s	loc_4AC0
-		andi.b	#1,d2
-
-loc_4AC0:
 		cmpi.b	#3,d2
-		blo.s	loc_4AC8
+		blo.s	loc_4AC0
 		moveq	#0,d2
 
+loc_4AC0:
+		andi.b	#3,d2
 loc_4AC8:
 		move.b	d2,mapping_frame(a0)
 		move.b	d2,(Title_screen_option).w
