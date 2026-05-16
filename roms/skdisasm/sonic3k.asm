@@ -6159,7 +6159,7 @@ Obj_TitleCopyright:
 		move.w	#$80,priority(a0)
 		move.b	#$C,width_pixels(a0)
 		move.b	#4,height_pixels(a0)
-		move.b	#4,mapping_frame(a0)
+		move.b	#5,mapping_frame(a0)
 		move.l	#Obj_TitleCopyright_Display,(a0)
 
 Obj_TitleCopyright_Display:
