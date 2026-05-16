@@ -6204,6 +6204,13 @@ loc_4AC0:
 loc_4AC8:
 		move.b	d2,mapping_frame(a0)
 		move.b	d2,(Title_screen_option).w
+		cmpi.b	#2,d2	; Don't display Sound Test until the cheat is enabled
+		bne.s	Obj_TitleSelection_NotOptions
+		tst.b	(Level_select_flag).w
+		bne.s	Obj_TitleSelection_NotOptions
+		move.b	#4,mapping_frame(a0)
+
+Obj_TitleSelection_NotOptions:
 		andi.b	#3,d0
 		beq.s	loc_4ADE
 		moveq	#signextendB(sfx_Switch),d0
