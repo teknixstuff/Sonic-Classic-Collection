@@ -1,0 +1,10 @@
+void divdevset(int param);
+void enkeichg(void);
+void scr_set(void);
+void scrbinit(short xWk, short yWk);
+void scroll(void);
+void scrollwrt(void);
+void block_wrt(unsigned short BlockNo, unsigned short xOffs, unsigned short yOffs);
+void mapwrt(void);
+void mapwrtb(void);
+void mapinit(void);

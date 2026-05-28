@@ -1,0 +1,32 @@
+#include "../TYPES.h"
+
+unsigned short gdemoflg;
+unsigned short pl_yspd;
+unsigned short pl_xspd;
+unsigned char gameinit;
+unsigned char ufoleftsave;
+unsigned char good_flag;
+unsigned char endskipflg;
+unsigned char white_inflg;
+unsigned char stagenm_save;
+unsigned char nobramflg;
+unsigned char modeflg;
+unsigned char goodflg;
+unsigned char clrstnm_sp;
+unsigned char clrstnm;
+unsigned short reg1save;
+unsigned short rcnt;
+int timesave;
+unsigned char stage_no;
+unsigned char round_no;
+unsigned char ufoleft;
+unsigned char clrspflg;
+int_union spe_time;
+unsigned short ringno;
+unsigned char stagenm;
+unsigned char spgmmode;
+unsigned char clrspflg_m;
+unsigned char stagenm_m;
+int slidewk[1024];
+int* ib_adr;
+int* sg_adr;

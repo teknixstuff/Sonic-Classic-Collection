@@ -1,0 +1,12 @@
+void SetDebugFlag(unsigned int NewVal);
+int game(void);
+void game_init(void);
+void play_act_set(void);
+void flow_act_set(void);
+void scdset(void);
+void syspatchg(void);
+void sdfdout(void);
+void sdfdin(void);
+void da_set(void);
+void watercnt(void);
+void watercoli(void);

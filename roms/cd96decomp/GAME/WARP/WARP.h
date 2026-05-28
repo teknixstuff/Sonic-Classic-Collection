@@ -1,0 +1,12 @@
+void warp_init();
+sprite_status* atomwk_search();
+int warp();
+void sonic0(sprite_status* pActwk);
+void sonic1(sprite_status* pActwk);
+void sonic2(sprite_status* pActwk);
+void sonic3(sprite_status* pActwk);
+void sonic_act(sprite_status* pActwk);
+void atom1(sprite_status* pActwk);
+void atom0(sprite_status* pActwk);
+void atom(sprite_status* pActwk);
+void clchg();

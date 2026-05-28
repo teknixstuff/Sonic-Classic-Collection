@@ -1,0 +1,8 @@
+void thankssprinit(void);
+void sonic_set(void);
+void pocky_set(void);
+void pecky_set(void);
+void ricky_set(void);
+void inco_set(void);
+void hato_set(void);
+void sheep_set(void);

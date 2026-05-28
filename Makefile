@@ -805,6 +805,7 @@ ifeq ($(SHARED_LIBVORBIS),)
 endif
 
 include $(CORE_DIR)/libretro/Makefile.common
+include $(CORE_DIR)/roms/cd96decomp/Makefile.common
 
 OBJECTS := $(SOURCES_C:.c=.o) $(SOURCES_CXX:.cpp=.o)
 
@@ -930,7 +931,7 @@ $(TARGET): $(OBJECTS)
 ifeq ($(STATIC_LINKING), 1)
 	$(AR) rcs $@ $(OBJECTS)
 else
-	$(LD) $(LINKOUT)$(TARGET) $(fpic) $(OBJECTS) $(LDFLAGS) $(SHARED) $(LIBS)
+	#$(LD) $(LINKOUT)$(TARGET) $(fpic) $(OBJECTS) $(LDFLAGS) $(SHARED) $(LIBS)
 endif
 
 ifeq ($(SDL_FRONTEND), 1)

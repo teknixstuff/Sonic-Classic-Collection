@@ -1,0 +1,15 @@
+void clchgctr(void);
+void clchg_sub0(unsigned char* pChgTime, unsigned char* pChgCnt, unsigned char* pCntTbl, PALETTEENTRY* pColTbl);
+void fadein(void);
+void fadein0(void);
+void fadein2(PALETTEENTRY* lpPeDest, PALETTEENTRY* lpPeSrc);
+void fadeout(void);
+void flashin(void);
+void flashout(void);
+void clwout(void);
+void clwin_init(void);
+void clwin(void);
+void colorset(int ColorNo);
+void colorset2(int ColorNo);
+void colorset3(int ColorNo);
+int FadeProc(void);

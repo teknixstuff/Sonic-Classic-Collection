@@ -1,0 +1,13 @@
+void eda(sprite_status* edawk);
+void eda_init(sprite_status* edawk);
+void eda_move(sprite_status* edawk);
+void kage(sprite_status* kagewk);
+void kage_init(sprite_status* kagewk);
+void kage_move(sprite_status* kagewk);
+void ana(sprite_status* anawk);
+void kage1_init(sprite_status* anawk);
+void kage1_move0(sprite_status* anawk);
+void kage1_move1(sprite_status* anawk);
+unsigned char kage1_chk(sprite_status* anawk);
+void kage1_clr(sprite_status* anawk);
+void shooter1(sprite_status* shootwk);

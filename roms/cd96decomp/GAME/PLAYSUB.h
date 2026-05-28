@@ -1,0 +1,18 @@
+void patchg(sprite_status* patchgwk, unsigned char** pat_dat);
+void marker(sprite_status* markerwk);
+void plairset(void);
+void test_act(sprite_status* testwk);
+void tensuu0(sprite_status* tensuuwk, unsigned char uf_data);
+void bakuha(sprite_status* bakuhawk);
+void baku_init(sprite_status* bakuhawk);
+void flower(sprite_status* flowerwk);
+void mizukiri(sprite_status* mizukiwk);
+void futa(sprite_status* futawk);
+void exit2_set(sprite_status* testwk);
+void exit2(sprite_status* exitwk);
+void baria(sprite_status* bariawk);
+void ball(sprite_status* ballwk);
+void plawamaster(sprite_status* pActwk);
+void plawa(sprite_status* pActwk);
+void wave(sprite_status* pActwk);
+void bou(sprite_status* pActwk);

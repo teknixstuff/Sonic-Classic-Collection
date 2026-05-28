@@ -1,0 +1,209 @@
+#include "../EQU.h"
+#include "../ACTION.h"
+#include "../ACTSET.h"
+#include "../ETC.h"
+#include "../RIDECHK.h"
+
+static void a_init(sprite_status* pActwk);
+static void a_move(sprite_status* pActwk);
+static void com(sprite_status* pActwk);
+
+static sprite_pattern pat00 =
+{
+  1,
+  { { -32, -16, 0, 455 } }
+};
+sprite_pattern* pat_iwa5wave[1] = { &pat00 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void iwa5wave(sprite_status* pActwk) {
+  if (pActwk->r_no0) a_move(pActwk);
+  else a_init(pActwk);
+}
+
+
+
+
+static void a_init(sprite_status* pActwk) {
+  sprite_status* pNewActwk;
+  int_union ld0;
+  short d3, d4, d5, d6;
+
+  ((short*)pActwk)[24] = pActwk->xposi.w.h;
+  ld0.w.h = pActwk->xposi.w.h;
+  ld0.w.l = 0;
+  ld0.l -= 0x800000;
+  *(int*)&pActwk->actfree[4] = ld0.l;
+  ld0.l += 0x1000000;
+  *(int*)&pActwk->actfree[8] = ld0.l;
+
+  d6 = 1;
+  d5 = pActwk->xposi.w.h;
+  d5 += 64;
+  d4 = 128;
+  d3 = -32768;
+  if (pActwk->userflag.b.h)
+  {
+    d3 = 0;
+  }
+  pNewActwk = pActwk;
+
+  pNewActwk->actflg |= 4;
+  pNewActwk->r_no0 = 2;
+  pNewActwk->sprpri = 3;
+  pNewActwk->sprhs = 32;
+  pNewActwk->sprhsize = 32;
+  pNewActwk->sprvsize = 16;
+  pNewActwk->sproffset = 17543;
+  pNewActwk->patbase = pat_iwa5wave;
+  ((short*)pNewActwk)[29] = pActwk->yposi.w.h;
+
+  do
+  {
+    if (d6 != 1)
+    {
+      if (actwkchk(&pNewActwk) != 0) return;
+
+      ((short*)pNewActwk)[23] = (unsigned short)(pActwk - actwk);
+      pNewActwk->actno = pActwk->actno;
+      *(int*)&pNewActwk->actfree[4] = *(int*)&pActwk->actfree[4];
+      *(int*)&pNewActwk->actfree[8] = *(int*)&pActwk->actfree[8];
+      pNewActwk->yposi.w.h = pActwk->yposi.w.h;
+
+      pNewActwk->actflg |= 4;
+      pNewActwk->r_no0 = 2;
+      pNewActwk->sprpri = 3;
+      pNewActwk->sprhs = 32;
+      pNewActwk->sprhsize = 32;
+      pNewActwk->sprvsize = 16;
+      pNewActwk->sproffset = 17543;
+      pNewActwk->patbase = pat_iwa5wave;
+      ((short*)pNewActwk)[29] = pActwk->yposi.w.h;
+    }
+    pNewActwk->xposi.w.h = d5;
+    d5 -= d4;
+    ((short*)pNewActwk)[30] = d3;
+  } while (d6--);
+
+}
+
+
+
+
+static void a_move(sprite_status* pActwk) {
+  sprite_status* pMainwk;
+  int_union ld0, ld1;
+  int d0, d1;
+  short sd0, sd1;
+  unsigned char kakudo;
+
+  d0 = pActwk->xposi.l;
+  d1 = d0;
+  d1 -= 32768;
+  if (d1 <= *(int*)&pActwk->actfree[4])
+  {
+    d0 = *(int*)&pActwk->actfree[8];
+    d1 = d0;
+  }
+  pActwk->xposi.l = d1;
+  d1 -= d0;
+  d1 >>= 8;
+  pActwk->xspeed.w = (unsigned short)(long int)d1;
+
+
+  ((short*)pActwk)[30] += 256;
+  sd0 = ((short*)pActwk)[30];
+  sd0 >>= 8;
+  kakudo = (unsigned short)(sd0 & 255);
+  sinset(kakudo, &sd0, &sd1);
+  ld1.w.l = 0;
+  ld1.w.h = sd1;
+  ld1.l >>= 2;
+  ld0.l = ld1.l;
+  ld0.l >>= 1;
+  ld0.l += ld1.l;
+  ld0.l += 32767 + 1;
+  sd0 = ld0.w.h;
+  ld0.w.h = ld0.w.l;
+  ld0.w.l = sd0;
+  ld0.w.l += ((short*)pActwk)[29];
+  pActwk->yposi.w.h = ld0.w.l;
+  if (((short*)pActwk)[23])
+  {
+    pMainwk = &actwk[((short*)pActwk)[23]];
+    if (pMainwk->actno == 41)
+    {
+      com(pActwk);
+      return;
+    }
+
+
+    frameout(pActwk);
+    return;
+  }
+
+
+
+  com(pActwk);
+  frameout_s00(pActwk, ((short*)pActwk)[24]);
+
+}
+
+static void com(sprite_status* pActwk) {
+  unsigned char d0;
+
+  ((short*)pActwk)[31] = pActwk->xspeed.w;
+  pActwk->xspeed.w = 0;
+  pActwk->sprvsize = 18;
+  if (ridechk(pActwk, &actwk[0])) d0 = 255;
+  else d0 = 0;
+  pActwk->xspeed.w = ((short*)pActwk)[31];
+  pActwk->sprvsize = 16;
+  if (d0)
+  {
+    ridechk(pActwk, &actwk[0]);
+  }
+
+  actionsub(pActwk);
+}
