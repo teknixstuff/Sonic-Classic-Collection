@@ -94,7 +94,7 @@ uint8 hscroll_mask;               /* Horizontal Scrolling line mask */
 uint8 playfield_shift;            /* Width of planes A, B (in bits) */
 uint8 playfield_col_mask;         /* Playfield column mask */
 uint16 playfield_row_mask;        /* Playfield row mask */
-uint16 vscroll;                   /* Latched vertical scroll value */
+uint16 vdp_vscroll;               /* Latched vertical scroll value */
 uint8 odd_frame;                  /* 1: odd field, 0: even field */
 uint8 im2_flag;                   /* 1= Interlace mode 2 is being used */
 uint8 interlaced;                 /* 1: Interlaced mode 1 or 2 */
@@ -295,7 +295,7 @@ void vdp_reset(void)
   satb = 0;
   hscb = 0;
 
-  vscroll = 0;
+  vdp_vscroll = 0;
 
   hscroll_mask        = 0x00;
   playfield_shift     = 6;

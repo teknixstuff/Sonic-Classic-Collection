@@ -1428,7 +1428,7 @@ void render_bg_m4(int line)
   uint32 *dst = (uint32 *)&linebuf[0][0x20 + shift];
 
   /* Vertical scrolling */
-  int v_line = line + vscroll;
+  int v_line = line + vdp_vscroll;
 
   /* Pattern name table mask */
   uint16 nt_mask = ~0x3C00 ^ (reg[2] << 10);

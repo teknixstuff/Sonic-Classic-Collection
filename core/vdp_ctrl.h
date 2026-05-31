@@ -75,7 +75,7 @@ extern uint8 vdp_pal;
 extern uint8 h_counter;
 extern uint16 v_counter;
 extern uint16 vc_max;
-extern uint16 vscroll;
+extern uint16 vdp_vscroll;
 extern uint16 lines_per_frame;
 extern uint16 max_sprite_pixels;
 extern uint32 fifo_cycles[4];

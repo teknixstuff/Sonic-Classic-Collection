@@ -1342,7 +1342,7 @@ void system_frame_sms(int do_skip)
   mcycles_vdp += MCYCLES_PER_LINE;
 
   /* latch Vertical Scroll register */
-  vscroll = reg[9];
+  vdp_vscroll = reg[9];
   
   /* reset line count */
   line = 0;

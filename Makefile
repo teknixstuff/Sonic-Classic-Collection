@@ -763,15 +763,11 @@ else
    SDL_FRONTEND = 1
    SDL_FRONTEND_TARGET := $(TARGET_NAME)_sdl.exe
    SDL_FRONTEND_LDFLAGS := -static -static-libgcc -static-libstdc++ -Wl,--version-script=$(CORE_DIR)/libretro/link.T -Wl,--no-undefined
-   SDL_FRONTEND_LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -static -lwinmm -lole32 -limm32 -loleaut32 -lversion -lsetupapi
+   SDL_FRONTEND_LIBS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -static -lwinmm -lole32 -limm32 -loleaut32 -lversion -lsetupapi -lopusfile -lopus -logg
    SDL_FRONTEND_LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other sdl2 SDL2_image)
    SDL_FRONTEND_LIBS += $(shell pkg-config --libs-only-l sdl2 SDL2_image)
    SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o libretro/frontend/img.o $(ROMDIR)/roms.o
    CFLAGS += $(shell pkg-config --cflags sdl2)
-endif
-
-ifeq ($(SHARED_LIBVORBIS), 1)
-	LDFLAGS += -lvorbisfile
 endif
 
 ifeq ($(DEBUG), 1)
@@ -800,10 +796,6 @@ else
 endif
 endif
 
-ifeq ($(SHARED_LIBVORBIS),)
-   TREMOR_SRC_DIR := $(CORE_DIR)/core/tremor
-endif
-
 include $(CORE_DIR)/libretro/Makefile.common
 include $(CORE_DIR)/roms/cd96decomp/Makefile.common
 
@@ -811,12 +803,6 @@ OBJECTS := $(SOURCES_C:.c=.o) $(SOURCES_CXX:.cpp=.o)
 
 ifeq ($(LOGSOUND), 1)
    LIBRETRO_CFLAGS := -DLOGSOUND
-endif
-
-ifeq ($(SHARED_LIBVORBIS), 1)
-	DEFINES := -DUSE_LIBVORBIS
-else
-	DEFINES := -DUSE_LIBTREMOR
 endif
 
 ifeq ($(HAVE_CHD), 1)
