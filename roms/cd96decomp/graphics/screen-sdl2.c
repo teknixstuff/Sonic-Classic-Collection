@@ -9,6 +9,7 @@ static void wait_for_next_frame(void);
 
 SDL_Surface* gp_screen = 0;
 static SDL_Surface* gp_screen_rgba = 0;
+extern SDL_Window *g_win;
 static SDL_Window* gp_window = 0;
 static SDL_Renderer* gp_renderer = 0;
 static SDL_Texture* gp_texture = 0;
@@ -40,7 +41,9 @@ void init_screen(void) {
       frame_multiplier = refresh_rate / FRAMES_PER_SECOND;
     }
   }
-  SDL_CreateWindowAndRenderer(1200, 672, 0, &gp_window, &gp_renderer);
+  //SDL_CreateWindowAndRenderer(1200, 672, 0, &gp_window, &gp_renderer);
+  gp_window = g_win;
+  gp_renderer = SDL_CreateRenderer(gp_window, -1, 0);
   if (gp_window == 0 || gp_renderer == 0) {
     fprintf(stderr, "SDL_CreateWindowAndRenderer failed. Error: %s\n", SDL_GetError());
     abort();

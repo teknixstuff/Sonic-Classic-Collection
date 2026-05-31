@@ -797,7 +797,7 @@ endif
 endif
 
 include $(CORE_DIR)/libretro/Makefile.common
-#include $(CORE_DIR)/roms/cd96decomp/Makefile.common
+include $(CORE_DIR)/roms/cd96decomp/Makefile.common
 
 OBJECTS := $(SOURCES_C:.c=.o) $(SOURCES_CXX:.cpp=.o)
 
