@@ -2,7 +2,9 @@
 #include "LOADER2.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "../services.h"
+#include "../boxreader.h"
 
 static unsigned int SE_DashReq;
 static unsigned char SeToWavTbl[80] = {
@@ -73,20 +75,18 @@ void ReadBlockMap(void) {
 
 
   memset(blockwk, 0, sizeof(blockwk));
-  hf = fopen(fn, "rb");
-  if (hf == 0) {
-
-    sprintf(buf, "Block Map Read Error:%s\n", fn);
-    printf(buf);
-
-  }
-  else {
-    fread(blockwk, 1, sizeof(blockwk), hf);
-    fclose(hf);
+  
+  unsigned char* file_data = NULL;
+  int file_size = box_read((void**)&file_data, fn);
+  if (file_size < 1) {
+	fprintf(stderr, "Could not read %s, error %i.\n", fn, file_size);
+    abort();
+  } else {
+    memcpy(blockwk, file_data, file_size < sizeof(blockwk) ? file_size : sizeof(blockwk));
+    free(file_data);
 
     sprintf(buf, "Block Map Read:%s\n", fn);
     printf(buf);
-
   }
 }
 
@@ -117,24 +117,24 @@ void ReadScrolMap(void) {
     p += 256;
   }
 
-  hf = fopen(fn, "rb");
-  if (hf == 0) {
-
-    sprintf(buf, "Scroll Map Read Error:%s\n", fn);
-    printf(buf);
-
+  unsigned char* file_data = NULL;
+  int file_size = box_read((void**)&file_data, fn);
+  if (file_size < 1) {
+	fprintf(stderr, "Could not read %s, error %i.\n", fn, file_size);
+    abort();
   }
   else {
+	unsigned char* file_data_start = file_data;
     p = mapwk;
     for (i = 0; i < 128; ++i) {
 
 
-      if (fread(p, 1, 512, hf) == -1) break;
-
-
+      if (file_data >= file_data_start + file_size) break;
+	  memcpy(p, file_data, 512);
+      file_data += 512;
       p += 256;
     }
-    fclose(hf);
+    free(file_data_start);
 
     sprintf(buf, "Scroll Map Read:%s\n", fn);
     printf(buf);
