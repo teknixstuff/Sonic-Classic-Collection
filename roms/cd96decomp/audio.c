@@ -65,12 +65,8 @@ void play_bgm(short id) {
   }
   void* soundtrack_data = NULL;
   int soundtrack_size = box_read(&soundtrack_data, soundtrack_path);
-  if (!soundtrack_data || soundtrack_size < 1) {
-	if (soundtrack_size < 0) {
-      fprintf(stderr, "Could not read %s, error %i.\n", soundtrack_path, soundtrack_size);
-	} else {
-      fprintf(stderr, "Could not read %s.\n", soundtrack_path);
-	}
+  if (soundtrack_size < 1) {
+	fprintf(stderr, "Could not read %s, error %i.\n", soundtrack_path, soundtrack_size);
     abort();
   }
   int error;
@@ -94,6 +90,7 @@ void play_bgm(short id) {
 	filled += samples;
   }
   op_free(opusFile);
+  free(soundtrack_data);
   g_musicOffset = 0;
   SDL_UnlockAudio();
 }
@@ -115,19 +112,21 @@ long get_remaining_bgm(void) {
 void load_sounds(void) {
   cmp_header header;
   int i;
-  FILE* fp = fopen("PCM.CMP", "rb");
-
-  if (fp == 0) {
-    fprintf(stderr, "Could not open PCM.CMP.\n");
+  unsigned char* pcm_data;
+  int pcm_size = box_read((void**)&pcm_data, "PCM.CMP");
+  if (pcm_size < 1) {
+	fprintf(stderr, "Could not read PCM.CMP, error %i.\n", pcm_size);
     abort();
   }
-  read_cmp_header_file(fp, &header);
+  
+  pcm_data = read_cmp_header(pcm_data, &header);
 
   for (i = 0; i < AUDIO_SOUNDS; ++i) {
-    read_ulong_littleendian_file(fp, &g_sounds[i].size);
+    read_ulong_littleendian(&pcm_data, &g_sounds[i].size);
   }
 
   for (i = 0; i < AUDIO_SOUNDS; ++i) {
+	fprintf(stderr, "Uh-oh\n");
     SDL_AudioCVT cvt;
     unsigned char* p_data = 0;
 
@@ -140,7 +139,8 @@ void load_sounds(void) {
       fprintf(stderr, "Could not allocate memory for audio sample conversion.\n");
       abort();
     }
-    fread(p_data, 1, g_sounds[i].size, fp);
+    memcpy(p_data, pcm_data, g_sounds[i].size);
+	pcm_data += g_sounds[i].size;
     cvt.buf = p_data;
     cvt.len = g_sounds[i].size;
     if (SDL_ConvertAudio(&cvt) == -1) {
@@ -150,6 +150,8 @@ void load_sounds(void) {
     g_sounds[i].p_data = p_data;
     g_sounds[i].size = cvt.len_cvt;
   }
+  
+  free(pcm_data);
 }
 
 
