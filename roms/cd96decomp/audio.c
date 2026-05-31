@@ -9,6 +9,7 @@
 #include "pcminfo.h"
 #include "soundchannel.h"
 #include "util.h"
+#include "boxreader.h"
 static void fill_audio_buffer(void* userdata, unsigned char* stream, int length);
 
 extern int g_use_original_soundtrack;
@@ -54,17 +55,28 @@ void play_bgm(short id) {
 	  free(g_music.p_data);
 	  g_music.size = 0;
   }
-  static char soundtrack_path[sizeof("TITLE\\MUSIC\\BGM_??_00.OPUS")];
+  static char soundtrack_path[sizeof("TITLE/MUSIC/BGM_??_00.opus")];
   if (id >= 36) {
-	sprintf(soundtrack_path, "TITLE\\MUSIC\\BGM_%02i.OPUS", id);
+	sprintf(soundtrack_path, "TITLE/MUSIC/BGM_%02i.opus", id);
   } else if (g_use_original_soundtrack) {
-	sprintf(soundtrack_path, "TITLE\\MUSIC\\BGM_JP_%02i.OPUS", id);
+	sprintf(soundtrack_path, "TITLE/MUSIC/BGM_JP_%02i.opus", id);
   } else {
-	sprintf(soundtrack_path, "TITLE\\MUSIC\\BGM_US_%02i.OPUS", id);
+	sprintf(soundtrack_path, "TITLE/MUSIC/BGM_US_%02i.opus", id);
   }
-  OggOpusFile* opusFile = op_open_file(soundtrack_path, NULL);
+  void* soundtrack_data = NULL;
+  int soundtrack_size = box_read(&soundtrack_data, soundtrack_path);
+  if (!soundtrack_data || soundtrack_size < 1) {
+	if (soundtrack_size < 0) {
+      fprintf(stderr, "Could not read %s, error %i.\n", soundtrack_path, soundtrack_size);
+	} else {
+      fprintf(stderr, "Could not read %s.\n", soundtrack_path);
+	}
+    abort();
+  }
+  int error;
+  OggOpusFile* opusFile = op_open_memory(soundtrack_data, soundtrack_size, &error);
   if (!opusFile) {
-	fprintf(stderr, "Could not open %s.\n", soundtrack_path);
+	fprintf(stderr, "Could not open %s, error %i, args %p %i.\n", soundtrack_path, error, soundtrack_data, soundtrack_size);
     abort();
   }
   int sampleCount = op_pcm_total(opusFile, 0);

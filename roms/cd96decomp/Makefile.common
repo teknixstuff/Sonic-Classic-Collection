@@ -1,8 +1,10 @@
 CDSOURCES := audio.c \
 	besttimes.c \
+	boxreader.c \
 	cmp.c \
 	littleplanet.c \
 	main.c \
+	microtar.c \
 	opening.c \
 	options.c \
 	savedata.c \

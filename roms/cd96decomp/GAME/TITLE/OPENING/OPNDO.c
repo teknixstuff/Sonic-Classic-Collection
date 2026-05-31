@@ -460,6 +460,7 @@ static void OEUpdateMsg(void) {
   }
   
   if (get_remaining_bgm() < 72000) {
+	pause_bgm();
     nMenuKind = 8;
     nFadoTime = 21;
     nFadoValu = 32;
