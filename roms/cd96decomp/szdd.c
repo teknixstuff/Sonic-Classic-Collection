@@ -4,7 +4,7 @@
 #include <string.h>
 #include "constants.h"
 #include "util.h"
-
+#include "boxreader.h"
 
 unsigned char* szdd_decompress(char* p_filename) {
   unsigned char* p_decompressed = 0;
@@ -12,24 +12,26 @@ unsigned char* szdd_decompress(char* p_filename) {
   unsigned int decompressed_pos = 0;
   unsigned char dictionary[SZDD_DICTIONARY_SIZE];
   unsigned int literal_pos = SZDD_DICTIONARY_SIZE - 16;
-  FILE* fp = fopen(p_filename, "rb");
-
-  if (fp == 0) {
-    fprintf(stderr, "Could not open %s.\n", p_filename);
+  unsigned char* file_data = NULL;
+  int file_size = box_read((void**)&file_data, p_filename);
+  if (file_size < 1) {
+	fprintf(stderr, "Could not read %s, error %i.\n", p_filename, file_size);
     abort();
   }
-  if (fgetc(fp) != 'S') return 0; /* magic */
-  if (fgetc(fp) != 'Z') return 0;
-  if (fgetc(fp) != 'D') return 0;
-  if (fgetc(fp) != 'D') return 0;
-  if (fgetc(fp) != 0x88) return 0;
-  if (fgetc(fp) != 0xF0) return 0;
-  if (fgetc(fp) != 0x27) return 0;
-  if (fgetc(fp) != 0x33) return 0;
-  if (fgetc(fp) != 'A') return 0; /* mode */
-  fgetc(fp); /* last character of filename */
+  unsigned char* file_data_start = file_data;
+  
+  if (*file_data++ != 'S') return 0; /* magic */
+  if (*file_data++ != 'Z') return 0;
+  if (*file_data++ != 'D') return 0;
+  if (*file_data++ != 'D') return 0;
+  if (*file_data++ != 0x88) return 0;
+  if (*file_data++ != 0xF0) return 0;
+  if (*file_data++ != 0x27) return 0;
+  if (*file_data++ != 0x33) return 0;
+  if (*file_data++ != 'A') return 0; /* mode */
+  file_data++; /* last character of filename */
 
-  read_ulong_littleendian_file(fp, &decompressed_cnt);
+  read_ulong_littleendian(&file_data, &decompressed_cnt);
   p_decompressed = malloc(decompressed_cnt);
   if (p_decompressed == 0) {
     fprintf(stderr, "Could not allocate memory for SZDD decompression.\n");
@@ -38,22 +40,23 @@ unsigned char* szdd_decompress(char* p_filename) {
   memset(dictionary, ' ', SZDD_DICTIONARY_SIZE);
 
   do {
-    unsigned int control = fgetc(fp);
+    unsigned int control = *file_data++;
     unsigned int bit;
-    if (feof(fp)) break;
+    if (file_data >= file_data_start + file_size) break;
 
     for (bit = 1; bit & 0xFF; bit <<= 1) {
+	  printf("%i\n", file_size - (file_data - file_data_start));
       if (control & bit) {
-        p_decompressed[decompressed_pos] = dictionary[literal_pos] = fgetc(fp);
-        if (feof(fp)) break;
+        p_decompressed[decompressed_pos] = dictionary[literal_pos] = *file_data++;
+        if (file_data >= file_data_start + file_size) break;
         ++literal_pos;
         literal_pos %= SZDD_DICTIONARY_SIZE;
         ++decompressed_pos;
       }
       else {
-        unsigned int match_pos = fgetc(fp);
-        unsigned int match_len = fgetc(fp);
-        if (feof(fp)) break;
+        unsigned int match_pos = *file_data++;
+        unsigned int match_len = *file_data++;
+        if (file_data >= file_data_start + file_size) break;
         match_pos |= (match_len & 0xF0) << 4;
         match_len = (match_len & 0x0F) + 3;
 
@@ -69,8 +72,8 @@ unsigned char* szdd_decompress(char* p_filename) {
     }
   }
   while (1);
-
-  fclose(fp);
+		
+  free(file_data_start);
 
   return p_decompressed;
 }

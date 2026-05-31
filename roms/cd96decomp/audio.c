@@ -126,7 +126,6 @@ void load_sounds(void) {
   }
 
   for (i = 0; i < AUDIO_SOUNDS; ++i) {
-	fprintf(stderr, "Uh-oh\n");
     SDL_AudioCVT cvt;
     unsigned char* p_data = 0;
 
