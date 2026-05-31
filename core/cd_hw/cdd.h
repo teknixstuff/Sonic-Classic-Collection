@@ -40,12 +40,6 @@
 
 #include "blip_buf.h"
 
-#if defined(USE_LIBVORBIS)
-#include <vorbis/vorbisfile.h>
-#elif defined(USE_LIBTREMOR)
-#include "tremor/ivorbisfile.h"
-#endif
-
 #if defined(USE_LIBCHDR)
 #include "libchdr/src/chd.h"
 #include "libchdr/src/cdrom.h"
@@ -74,9 +68,6 @@
 typedef struct
 {
   cdStream *fd;
-#if defined(USE_LIBTREMOR) || defined(USE_LIBVORBIS)
-  OggVorbis_File vf;
-#endif
   int offset;
   int start;
   int end;

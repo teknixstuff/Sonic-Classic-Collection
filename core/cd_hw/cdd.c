@@ -40,11 +40,7 @@
 
 extern int8 audio_hard_disable;
 
-#if defined(USE_LIBTREMOR) || defined(USE_LIBVORBIS)
-#define SUPPORTED_EXT 20
-#else
 #define SUPPORTED_EXT 10
-#endif
 
 /* CD blocks scanning speed */
 #define CD_SCAN_SPEED 30
@@ -131,18 +127,6 @@ static const uint32 toc_ffightj[29] =
 /* supported audio file extensions */
 static const char extensions[SUPPORTED_EXT][16] =
 {
-#if defined(USE_LIBTREMOR) || defined(USE_LIBVORBIS)
-  "%02d.ogg",
-  " %02d.ogg",
-  "-%02d.ogg",
-  "_%02d.ogg",
-  " - %02d.ogg",
-  "%d.ogg",
-  " %d.ogg",
-  "-%d.ogg",
-  "_%d.ogg",
-  " - %d.ogg",
-#endif
   "%02d.wav",
   " %02d.wav",
   "-%02d.wav",
@@ -154,39 +138,6 @@ static const char extensions[SUPPORTED_EXT][16] =
   "_%d.wav",
   " - %d.wav"
 };
-
-#if defined(USE_LIBTREMOR) || defined(USE_LIBVORBIS)
-
-static int seek64_wrap(void *f,ogg_int64_t off,int whence){
-  return cdStreamSeek(f,off,whence);
-}
-
-static ov_callbacks cb =
-{ 
-  (size_t (*)(void *, size_t, size_t, void *))  cdStreamRead,
-  (int (*)(void *, ogg_int64_t, int))           seek64_wrap,
-  (int (*)(void *))                             cdStreamClose,
-  (long (*)(void *))                            cdStreamTell
-};
-
-#ifdef DISABLE_MANY_OGG_OPEN_FILES
-static void ogg_free(int i)
-{
-  /* clear OGG file descriptor to prevent file from being closed */
-  cdd.toc.tracks[i].vf.datasource = NULL;
-
-  /* close VORBIS file structure */
-  ov_clear(&cdd.toc.tracks[i].vf);
-
-  /* indicates that the track is a seekable VORBIS file */
-  cdd.toc.tracks[i].vf.seekable = 1;
-
-  /* reset file reading position */
-  cdStreamSeek(cdd.toc.tracks[i].fd, 0, SEEK_SET);
-}
-#endif
-
-#endif
 
 void cdd_init(int samplerate)
 {
@@ -294,25 +245,6 @@ int cdd_context_load(uint8 *state, char *version)
     /* current track is an audio track ? */
     if (cdd.toc.tracks[index].type == TYPE_AUDIO)
     {
-#if defined(USE_LIBTREMOR) || defined(USE_LIBVORBIS)
-#ifdef DISABLE_MANY_OGG_OPEN_FILES
-      /* check if track index has changed */
-      if (index != cdd.index)
-      {
-        /* close previous track VORBIS file structure to save memory */
-        if (cdd.toc.tracks[cdd.index].vf.datasource)
-        {
-          ogg_free(cdd.index);
-        }
-
-        /* open current track VORBIS file */
-        if (cdd.toc.tracks[index].vf.seekable)
-        {
-          ov_open_callbacks(cdd.toc.tracks[index].fd,&cdd.toc.tracks[index].vf,0,0,cb);
-        }
-      }
-#endif
-#endif
       /* seek to current file read offset */
 #if defined(USE_LIBCHDR)
       if (cdd.chd.file)
