@@ -252,7 +252,7 @@ int mtar_find(mtar_t *tar, const char *name, mtar_header_t *h) {
   }
   /* Iterate all files until we hit an error or find the file */
   while ( (err = mtar_read_header(tar, &header)) == MTAR_ESUCCESS ) {
-    if ( !strcmp(header.name, name) ) {
+    if ( !stricmp(header.name, name) ) {
       if (h) {
         *h = header;
       }

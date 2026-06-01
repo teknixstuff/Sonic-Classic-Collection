@@ -6,6 +6,8 @@
 #include "GAME.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "../../boxreader.h"
 #include "../../services.h"
 #include "../COL.h"
 #include "../LOADER2.h"
@@ -621,9 +623,14 @@ void specgame_init(void) {
 
 
   sprintf(fn, "SPECIAL/MAP/SP%1dMAP.MAP", stagenm);
-  hf = fopen(fn, "rb");
-  fread(sm_adr0, 1, sizeof(sm_adr0), hf);
-  fclose(hf);
+  void* map_data;
+  int map_size = box_read(&map_data, fn);
+  if (map_size < 1) {
+	  fprintf(stderr, "Could not read %s, error %i.\n", fn, map_size);
+    abort();
+  }
+  memcpy(sm_adr0, map_data, sizeof(sm_adr0));
+  free(map_data);
 
 
 

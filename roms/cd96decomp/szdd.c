@@ -45,7 +45,6 @@ unsigned char* szdd_decompress(char* p_filename) {
     if (file_data >= file_data_start + file_size) break;
 
     for (bit = 1; bit & 0xFF; bit <<= 1) {
-	  printf("%i\n", file_size - (file_data - file_data_start));
       if (control & bit) {
         p_decompressed[decompressed_pos] = dictionary[literal_pos] = *file_data++;
         if (file_data >= file_data_start + file_size) break;

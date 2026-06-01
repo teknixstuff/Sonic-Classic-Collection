@@ -14,7 +14,7 @@ raw_bitmap load_raw_bitmap(char* p_filename, int palette_offset, int has_transpa
   void* bitmap_data;
   int bitmap_size = box_read(&bitmap_data, p_filename);
   if (bitmap_size < 1) {
-	fprintf(stderr, "Could not read %s, error %i.\n", p_filename, bitmap_size);
+	  fprintf(stderr, "Could not read %s, error %i.\n", p_filename, bitmap_size);
     abort();
   }
   SDL_Surface* p_surface = SDL_LoadBMP_RW(SDL_RWFromMem(bitmap_data, bitmap_size), 1);

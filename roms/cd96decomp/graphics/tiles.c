@@ -7,6 +7,7 @@
 #include "../cmptilemeta.h"
 #include "../constants.h"
 #include "../szdd.h"
+#include "../boxreader.h"
 #include "bitmapmanipulation.h"
 #include "planelayout.h"
 #include "screen.h"
@@ -212,18 +213,11 @@ void change_tile_bitmap(int tile_id, int bmp_id) {
 void load_plane_layout(plane_layout layout) {
   unsigned short* p_buffer = 0;
   int y, x;
-  FILE* p_file = fopen(layout.p_filename, "rb");
-
-  if (p_file == 0) {
-    fprintf(stderr, "Could not open %s.\n", layout.p_filename);
+  int file_size = box_read((void**)&p_buffer, layout.p_filename);
+  if (file_size < 1) {
+	fprintf(stderr, "Could not read %s, error %i.\n", layout.p_filename, file_size);
     abort();
   }
-  p_buffer = malloc(layout.width * layout.height * 2);
-  if (p_buffer == 0) {
-    fprintf(stderr, "Could not allocate memory for plane layout.\n");
-    abort();
-  }
-  fread(p_buffer, 2, layout.width * layout.height, p_file);
 
   for (y = 0; y < layout.height; ++y) {
     unsigned int tile_y = layout.start_y + y;
@@ -249,7 +243,6 @@ void load_plane_layout(plane_layout layout) {
   }
 
   free(p_buffer);
-  fclose(p_file);
 }
 
 
