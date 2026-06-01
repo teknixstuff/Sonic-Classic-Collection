@@ -5,6 +5,8 @@
 #include "LPLMAIN.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "../../../boxreader.h"
 #include "../../../services.h"
 #include "../../COL.h"
 #include "ACTM.h"
@@ -188,32 +190,44 @@ void lplgame_init(void) {
   InitMode = 0;
   bGameInit = 1;
 
-  if ((hf = fopen(ScrAMapFileName[0], "rb")) != 0)
+  void* aMap_data = NULL;
+  int aMap_size = box_read(&aMap_data, ScrAMapFileName[0]);
+  if (aMap_size < 1) {
+	  fprintf(stderr, "Could not read %s, error %i.\n", ScrAMapFileName[0], aMap_size);
+    abort();
+  }
+  else
   {
+    void* aMap_data_start = aMap_data;
     pSmap = (short*)sm_adr0;
     for (y = 0; y < 7; ++y)
     {
       for (x = 0; x < 8; ++x)
       {
-        if (fread(&s, 1, sizeof(s), hf) != 2)
+        if (aMap_size - (aMap_data - aMap_data_start) < 2)
         {
-          fclose(hf);
+          free(aMap_data_start);
           return;
         }
+        memcpy(&s, aMap_data, sizeof(s));
+        aMap_data += sizeof(s);
         *pSmap++ = s;
       }
       while (x < 10) *pSmap++ = 0, ++x;
     }
-    fclose(hf);
+    free(aMap_data_start);
   }
 
   memset(ScrBMap, 0, sizeof(ScrBMap));
-  if ((hf = fopen(ScrBMapFileName, "rb")) != 0)
-  {
-    (fread(ScrBMap, 1, sizeof(ScrBMap), hf) ^ sizeof(ScrBMap)) > 0;
-
-
-    fclose(hf);
+  void* bMap_data = NULL;
+  int bMap_size = box_read(&aMap_data, ScrBMapFileName);
+  if (bMap_size < 1) {
+	  fprintf(stderr, "Could not read %s, error %i.\n", ScrBMapFileName, aMap_size);
+    abort();
+  }
+  else {
+    memcpy(ScrBMap, bMap_data, bMap_size < sizeof(ScrBMap) ? bMap_size : sizeof(ScrBMap));
+    free(bMap_data);
   }
 
 
@@ -632,44 +646,50 @@ static void cgdata_change(void) {
 
   if (comdata_m5 != 3)
   {
-
-    if ((hf = fopen(ScrAMapFileName[comdata_m5], "rb")) != 0)
-    {
-      switch (comdata_m5)
-      {
-        case 0:
-          offs = 0;
-          break;
-
-        case 1:
-          offs = 200;
-          break;
-
-        case 2:
-          offs = 416;
-          break;
-
-        default:
-          offs = 0;
-          break;
-      }
-      pSmap = sm_adr0;
-      for (y = 0; y < 7; ++y)
-      {
-        for (x = 0; x < 8; ++x)
-        {
-          if (fread(&s, 1, sizeof(s), hf) != sizeof(s))
-          {
-            fclose(hf);
-            return;
-          }
-          if (s != 0) s += offs;
-          *pSmap++ = s;
-        }
-        while (x < 10) *pSmap++ = 0, ++x;
-      }
-      fclose(hf);
+    unsigned char* aMap_data = NULL;
+    int aMap_size = box_read((void**)&aMap_data, ScrAMapFileName[comdata_m5]);
+    if (aMap_size < 1) {
+  	  fprintf(stderr, "Could not read %s, error %i.\n", ScrAMapFileName[comdata_m5], aMap_size);
+      abort();
     }
+
+    switch (comdata_m5)
+    {
+      case 0:
+        offs = 0;
+        break;
+
+      case 1:
+        offs = 200;
+        break;
+
+      case 2:
+        offs = 416;
+        break;
+
+      default:
+        offs = 0;
+        break;
+    }
+    unsigned char* aMap_data_start = aMap_data;
+    pSmap = (short*)sm_adr0;
+    for (y = 0; y < 7; ++y)
+    {
+      for (x = 0; x < 8; ++x)
+      {
+        if (aMap_size - (aMap_data - aMap_data_start) < 2)
+        {
+          free(aMap_data_start);
+          return;
+        }
+        memcpy(&s, aMap_data, sizeof(s));
+        aMap_data += sizeof(s);
+        if (s != 0) s += offs;
+        *pSmap++ = s;
+      }
+      while (x < 10) *pSmap++ = 0, ++x;
+    }
+    free(aMap_data_start);
 
     switch (lplanet_no)
     {

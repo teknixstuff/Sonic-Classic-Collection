@@ -4,6 +4,8 @@
 #include "GAME.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "../../../boxreader.h"
 #include "../../../services.h"
 #include "../../IO.h"
 #include "BM_M.h"
@@ -167,14 +169,15 @@ void cgmwrt_a(void) {
   FILE* hf;
 
   memset(aMap, 0, sizeof(aMap));
-  if ((hf = fopen("TITLE/THANKS/MAP/VA_MAP.BIN", "rb")) == 0) {
-
-    printf("Map Load Error [va_map.bin]\n");
+  unsigned char* file_data = NULL;
+  int file_size = box_read((void**)&file_data, "TITLE/THANKS/MAP/VA_MAP.BIN");
+  if (file_size < 1) {
+	  fprintf(stderr, "Could not read TITLE/THANKS/MAP/VA_MAP.BIN, error %i.\n", file_size);
+    abort();
   }
   else {
-
-    fread(aMap, 1, sizeof(aMap), hf);
-    fclose(hf);
+    memcpy(aMap, file_data, file_size > sizeof(aMap) ? sizeof(aMap) : file_size);
+    free(file_data);
   }
   for (y = 0; y < 28; ++y) {
 
@@ -196,14 +199,15 @@ void cgmwrt_b(void) {
   FILE* hf;
 
   memset(bMap, 0, sizeof(bMap));
-  if ((hf = fopen("TITLE/THANKS/MAP/VB_MAP.BIN", "rb")) == 0) {
-
-    printf("Map Load Error [vb_map.bin]\n");
+  unsigned char* file_data = NULL;
+  int file_size = box_read((void**)&file_data, "TITLE/THANKS/MAP/VB_MAP.BIN");
+  if (file_size < 1) {
+	  fprintf(stderr, "Could not read TITLE/THANKS/MAP/VB_MAP.BIN, error %i.\n", file_size);
+    abort();
   }
   else {
-
-    fread(bMap, 1, sizeof(bMap), hf);
-    fclose(hf);
+    memcpy(bMap, file_data, file_size > sizeof(bMap) ? sizeof(bMap) : file_size);
+    free(file_data);
   }
   for (y = 0; y < 28; ++y) {
 

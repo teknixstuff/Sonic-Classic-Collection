@@ -79,7 +79,7 @@ void ReadBlockMap(void) {
   unsigned char* file_data = NULL;
   int file_size = box_read((void**)&file_data, fn);
   if (file_size < 1) {
-	fprintf(stderr, "Could not read %s, error %i.\n", fn, file_size);
+	  fprintf(stderr, "Could not read %s, error %i.\n", fn, file_size);
     abort();
   } else {
     memcpy(blockwk, file_data, file_size < sizeof(blockwk) ? file_size : sizeof(blockwk));
