@@ -463,4 +463,3 @@ CDSOURCES := audio.c \
 	graphics/tiles.c \
 	input/input-pc.c
 SOURCES_C += $(addprefix $(CORE_DIR)/roms/cd96decomp/,$(CDSOURCES))
-INCFLAGS += -IC:/msys64/mingw32/include/opus

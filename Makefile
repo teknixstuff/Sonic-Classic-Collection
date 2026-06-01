@@ -767,7 +767,7 @@ else
    SDL_FRONTEND_LDFLAGS += $(shell pkg-config --libs-only-L --libs-only-other sdl2 SDL2_image)
    SDL_FRONTEND_LIBS += $(shell pkg-config --libs-only-l sdl2 SDL2_image)
    SDL_FRONTEND_OBJECTS := libretro/frontend/sdlarch.o libretro/frontend/glad.o libretro/frontend/img.o $(ROMDIR)/roms.o
-   CFLAGS += $(shell pkg-config --cflags sdl2)
+   CFLAGS += $(shell pkg-config --cflags sdl2 opusfile)
 endif
 
 ifeq ($(DEBUG), 1)
