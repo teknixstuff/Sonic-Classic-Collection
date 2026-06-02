@@ -1,6 +1,7 @@
 #include "EQU.h"
 #include "ZONE.h"
 #include "../services.h"
+#include "../audio.h"
 #include "ACTION.h"
 #include "ACTSET.h"
 #include "DUMMY.h"
@@ -1267,7 +1268,8 @@ void clear(sprite_status* pAct) {
       break;
 
     case 8:
-      if ((unsigned short)((unsigned short)systemtimer.w.l - ClearSountWait) >= 720) {
+      if (get_remaining_bgm() < 24000) {
+        pause_bgm();
         pAct->r_no0 += 2;
       }
       actionsub(pAct);
