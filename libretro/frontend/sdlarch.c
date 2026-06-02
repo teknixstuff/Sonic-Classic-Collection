@@ -1006,7 +1006,7 @@ static SDL_Rect easedInterpolateRect(SDL_Rect a, SDL_Rect b, float t) {
 }
 
 static bool game_select() {
-    struct retro_game_geometry geometry = {1194, 672, 1194, 672, 0};
+    struct retro_game_geometry geometry = {1200, 672, 1200, 672, 0};
     float old_scale = g_scale;
     g_scale = 1;
     video_configure(&geometry);

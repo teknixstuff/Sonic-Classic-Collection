@@ -328,6 +328,7 @@ static void blit_plane_internal(unsigned char* p_pixelbuffer, unsigned short(*p_
 
 
 static unsigned char* blit_scanline(unsigned char* p_pixelbuffer, unsigned short* p_plane_row, unsigned short hscroll, unsigned short tile_row) {
+  hscroll -= TILE_LENGTH * 5; // center widescreen
   unsigned short plane_x = hscroll / TILE_LENGTH % PLANE_WIDTH_TILES;
   unsigned short tile = p_plane_row[plane_x];
   unsigned char* p_pixels = &g_tile_bitmaps[tile][tile_row * TILE_LENGTH];
@@ -383,6 +384,7 @@ static unsigned char* blit_scanline(unsigned char* p_pixelbuffer, unsigned short
 
 
 static unsigned char* blit_scanline_water(unsigned char* p_pixelbuffer, unsigned short* p_plane_row, unsigned short hscroll, unsigned short tile_row) {
+  hscroll -= TILE_LENGTH * 5; // center widescreen
   unsigned short plane_x = hscroll / TILE_LENGTH % PLANE_WIDTH_TILES;
   unsigned short tile = p_plane_row[plane_x];
   unsigned char* p_pixels = &g_tile_bitmaps[tile][tile_row * TILE_LENGTH];

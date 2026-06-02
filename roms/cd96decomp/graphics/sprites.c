@@ -173,6 +173,7 @@ void blit_sprites2(unsigned char* p_pixelbuffer, sprite_info* p_list, int scanli
 
 
 static void blit_sprite(unsigned char* p_pixelbuffer, raw_bitmap bitmap, int scanline_padding, int x, int y, int h_dir, int v_dir, unsigned char waterflag, short hintposi) {
+  x += TILE_LENGTH * 5; // center widescreen
   int x_end = x + bitmap.width;
   int y_end = y + bitmap.height;
   int x_skip = 0;
