@@ -652,7 +652,7 @@ static void score_init(sprite_status* pAct) {
   pAct->r_no0 = 2;
   pAct->patbase = scorepats[stageno_i.b.h][stageno_i.b.l][time_flag_i & 0x7F];
   pAct->sproffset = 32768;
-  pAct->xposi.w.h = 144;
+  pAct->xposi.w.h = 104;
   pAct->yposi.w.h = 136;
   if (pAct->userflag.b.l) {
     pAct->patno = 3;
