@@ -7006,33 +7006,35 @@ void scrollwrt(void) {
       *pScrFlag &= 254;
 
       lD4.l = -16;
-      wD5 = 65520;
+      wD5 = 65480;
       vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
-      hblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 21);
+      hblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 31);
     }
     if (*pScrFlag & 2) {
       *pScrFlag &= 253;
 
       lD4.l = 224;
-      wD5 = 65520;
+      wD5 = 65480;
       vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
-      hblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 21);
+      hblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 31);
     }
     if (*pScrFlag & 4) {
       *pScrFlag &= 251;
 
       lD4.l = -16;
-      wD5 = 65520;
-      vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
-      vblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 15);
+      for (wD5 = 65520; wD5 >= 65480; wD5 -= 16) {
+        vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
+        vblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 15);
+      }
     }
     if (*pScrFlag & 8) {
       *pScrFlag &= 247;
 
       lD4.l = -16;
-      wD5 = 320;
-      vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
-      vblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 15);
+      for (wD5 = 320; wD5 < 420; wD5 += 16) {
+        vramadrset(wH_posiw, wV_posiw, wD5, lD4.w.l, &TilePoint);
+        vblockwrt(&TilePoint, VramBase, wH_posiw, wV_posiw, wD5, lD4.w.l, pMapWk, 15);
+      }
     }
   }
 }
