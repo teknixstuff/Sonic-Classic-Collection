@@ -8,13 +8,14 @@
 #include "GAME/EQU.h"
 #include "GAME/COL.h"
 #include "GAME/WARP/WARP.h"
+#include <SDL2/SDL.h>
 static void load_time_warp(void);
 static void unload_time_warp(void);
 static void draw_time_warp(void);
 
 extern int g_quit;
 extern bmp_info SprBmp[700];
-
+extern SDL_Surface* gp_screen;
 
 void time_warp(void) {
   load_time_warp();
@@ -72,5 +73,23 @@ static void draw_time_warp(void) {
   blit_plane(get_screen_pixels(), PLANE_A_HI, get_scanline_padding(), hscroll_empty, vscroll.w.h, 0, SCREEN_HEIGHT_PX - 1, 0);
   blit_sprites_hi(get_screen_pixels(), get_scanline_padding(), 0, SCREEN_HEIGHT_PX - 1);
   unlock_screen();
+  
+  SDL_Rect srcRect, destRect;
+  srcRect.x = 40;
+  srcRect.y = 0;
+  srcRect.w = 40;
+  srcRect.h = SCREEN_HEIGHT_PX;
+  destRect.x = 360;
+  destRect.y = 0;    
+  SDL_BlitSurface(gp_screen, &srcRect, gp_screen, &destRect);
+      
+  destRect.x = 400; 
+  SDL_BlitSurface(gp_screen, &srcRect, gp_screen, &destRect);
+
+  srcRect.x = 320;
+  srcRect.w = 40;
+  destRect.x = 0;
+  SDL_BlitSurface(gp_screen, &srcRect, gp_screen, &destRect);
+  
   blit_screen();
 }
