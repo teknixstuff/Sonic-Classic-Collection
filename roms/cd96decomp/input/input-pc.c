@@ -45,9 +45,9 @@ void poll_controller(void) {
         case SDLK_LEFT: g_buttons[1] = 1; break;
         case SDLK_DOWN: g_buttons[2] = 1; break;
         case SDLK_UP: g_buttons[3] = 1; break;
-        case SDLK_SPACE: g_buttons[4] = 1; break;
-        case SDLK_ESCAPE: g_buttons[5] = 1; break;
-        case SDLK_c: g_buttons[6] = 1; break;
+        case SDLK_x: g_buttons[4] = 1; break;
+        case SDLK_z: g_buttons[5] = 1; break;
+        case SDLK_a: g_buttons[6] = 1; break;
         case SDLK_RETURN: g_buttons[7] = 1; break;
       }
     }
@@ -57,9 +57,9 @@ void poll_controller(void) {
         case SDLK_LEFT: g_buttons[1] = 0; break;
         case SDLK_DOWN: g_buttons[2] = 0; break;
         case SDLK_UP: g_buttons[3] = 0; break;
-        case SDLK_SPACE: g_buttons[4] = 0; break;
-        case SDLK_ESCAPE: g_buttons[5] = 0; break;
-        case SDLK_c: g_buttons[6] = 0; break;
+        case SDLK_x: g_buttons[4] = 0; break;
+        case SDLK_z: g_buttons[5] = 0; break;
+        case SDLK_a: g_buttons[6] = 0; break;
         case SDLK_RETURN: g_buttons[7] = 0; break;
       }
     }

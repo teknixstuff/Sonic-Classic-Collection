@@ -1048,7 +1048,9 @@ static bool game_select() {
                         selectedGame = (selectedGame + 1) % 4;
                         transitionTime = 1.0;
                     }
-                    if (ev.key.keysym.scancode == SDL_SCANCODE_RETURN) {
+                    if (ev.key.keysym.scancode == SDL_SCANCODE_RETURN ||
+                        ev.key.keysym.scancode == SDL_SCANCODE_X)
+                    {
                         if (selectedGame == 1) {
                             runState = 3;
                         } else {
